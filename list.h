@@ -4,11 +4,11 @@
 class list {
     public:
         list();
-        list(int n);
-        list(const list &l);
-        list(list &&l);
+        // list(int n);
+        // list(const list &l);
+        // list(list &&l);
         ~list();
-        list operator=(list &&l);
+        // list operator=(list &&l);
 
         // List Element access
 // const_reference front()	access the first element
@@ -24,26 +24,32 @@ class list {
 // size_type max_size()	returns the maximum possible number of elements
         
         // List Modifiers
-void clear(); //	clears the contents
+// void clear(); //	clears the contents
 // iterator insert(iterator pos, const_reference value); // insert(iterator pos, const_reference value)	inserts elements into concrete pos and returns the iterator that points to the new element
 // void erase(iterator pos);	//erases element at pos
-// void push_back(const_reference value); //	adds an element to the end
-void pop_back(); //	removes the last element
-// void push_front(const_reference value); //	adds an element to the head
-void pop_front(); //	removes the first element
-void swap(list& other);  //	swaps the contents
-void merge(list& other); //	merges two sorted lists
-// void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
-void reverse(); //	reverses the order of the elements
-void unique(); //	removes consecutive duplicate elements
-void sort(); //	sorts the elements
 
-
+void push_front(int a); //	adds an element to the end
+// void push_back(int a); //	adds an element to the head
+// void pop_front(); //	removes the first element
+// void pop_back(); //	removes the last element
+// void swap(list& other);  //	swaps the contents
+// void merge(list& other); //	merges two sorted lists
+// // void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
+// void reverse(); //	reverses the order of the elements
+// void unique(); //	removes consecutive duplicate elements
+// void sort(); //	sorts the elements
+void printList();
+        struct Node{
+            int _data;
+            Node *_prev;
+            Node *_next;
+            Node() : _data(0), _prev(nullptr), _next(nullptr){};
+            Node(int value) : _data(value), _prev(nullptr), _next(nullptr){};
+        };
         // fields:
-        int data;
-        list* head;
-        list* tail;
-        
+        Node* _head;
+        Node* _tail;
+        Node* _end;
         
 };
 

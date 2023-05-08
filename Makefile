@@ -3,8 +3,8 @@ gccc = g++ -Wall -Werror -Wextra
 all: exec
 
 exec:
-	gcc *.cc -o test
-	./test
+	g++ -g *.cc -o test_exec
+	./test_exec
 
 clean:
-	rm -rf ./test
+	rm -rf ./test_exec
