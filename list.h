@@ -1,18 +1,48 @@
 // #ifdef
 #include <iostream>
 
-class Container {
+class list {
     public:
-        Container();
-        Container(Container& other);
-        Container(Container&& other);
-        Begin();
-        End();
-        Check_Value();
-        Push();
-        Pop();
-        Clear();
+        list();
+        list(int n);
+        list(const list &l);
+        list(list &&l);
+        ~list();
+        list operator=(list &&l);
+
+        // List Element access
+// const_reference front()	access the first element
+// const_reference back()	access the last element
+
+        // List Iterators
+// iterator begin()	returns an iterator to the beginning
+// iterator end()	returns an iterator to the end
+
+        // List Capacity
+// bool empty()	checks whether the container is empty
+// size_type size()	returns the number of elements
+// size_type max_size()	returns the maximum possible number of elements
         
+        // List Modifiers
+void clear(); //	clears the contents
+// iterator insert(iterator pos, const_reference value); // insert(iterator pos, const_reference value)	inserts elements into concrete pos and returns the iterator that points to the new element
+// void erase(iterator pos);	//erases element at pos
+// void push_back(const_reference value); //	adds an element to the end
+void pop_back(); //	removes the last element
+// void push_front(const_reference value); //	adds an element to the head
+void pop_front(); //	removes the first element
+void swap(list& other);  //	swaps the contents
+void merge(list& other); //	merges two sorted lists
+// void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
+void reverse(); //	reverses the order of the elements
+void unique(); //	removes consecutive duplicate elements
+void sort(); //	sorts the elements
+
+
+        // fields:
+        int data;
+        list* head;
+        list* tail;
         
         
 };
@@ -37,4 +67,11 @@ class Container {
 //   - `iter1 != iter2`: два итератора не равны, если они указывают на разные элементы.
 
 
+//   В объекте класса контейнера хранятся указатели на "голову" и "хвост" списка, 
+//   указывающие на первый и последний элементы списка. 
+//   Контейнер List предоставляет прямой доступ только к "голове" и "хвосту", 
+//   но позволяет добавлять и удалять элементы в любой части списка.
+
+
 // #endif
+
