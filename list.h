@@ -28,10 +28,10 @@ class list {
 // iterator insert(iterator pos, const_reference value); // insert(iterator pos, const_reference value)	inserts elements into concrete pos and returns the iterator that points to the new element
 // void erase(iterator pos);	//erases element at pos
 
-void push_front(int a); //	adds an element to the end
-// void push_back(int a); //	adds an element to the head
-// void pop_front(); //	removes the first element
-// void pop_back(); //	removes the last element
+void push_front(int value); //	adds an element to the end
+void push_back(int value); //	adds an element to the head
+void pop_front(); //	removes the first element
+void pop_back(); //	removes the last element
 // void swap(list& other);  //	swaps the contents
 // void merge(list& other); //	merges two sorted lists
 // // void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
@@ -40,17 +40,18 @@ void push_front(int a); //	adds an element to the end
 // void sort(); //	sorts the elements
 void printList();
         struct Node{
-            int _data;
-            Node *_prev;
-            Node *_next;
-            Node() : _data(0), _prev(nullptr), _next(nullptr){};
-            Node(int value) : _data(value), _prev(nullptr), _next(nullptr){};
+                int _data;
+                Node *_prev;
+                Node *_next;
+                Node() : _data(0), _prev(nullptr), _next(nullptr){};
+                Node(int value) : _data(value), _prev(nullptr), _next(nullptr){};
+        //     ~Node() {delete };
         };
         // fields:
         Node* _head;
         Node* _tail;
         Node* _end;
-        
+        int _flag = 0;
 };
 
 // Каждый вид контейнеров должен предоставить пользователю следующие методы:
