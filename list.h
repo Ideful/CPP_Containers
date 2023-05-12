@@ -45,13 +45,13 @@ void printList();
                 Node *_next;
                 Node() : _data(0), _prev(nullptr), _next(nullptr){};
                 Node(int value) : _data(value), _prev(nullptr), _next(nullptr){};
-        //     ~Node() {delete };
+                // ~Node() {delete };
         };
         // fields:
         Node* _head;
         Node* _tail;
         Node* _end;
-        int _flag = 0;
+        int _flag;
 };
 
 // Каждый вид контейнеров должен предоставить пользователю следующие методы:
