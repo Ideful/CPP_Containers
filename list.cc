@@ -57,47 +57,65 @@ list<T>::~list(){ // ne rabotaet s 1 elementom
 // }
 template <class T>
 void list<T>::push_back(T value){
-    if (_head == nullptr || _tail == nullptr || _end == nullptr) {
-        _head = new Node();
+    // if (_head == nullptr || _tail == nullptr || _end == nullptr) {
+    //     _head = new Node();
+    //     _end = new Node();
+    //     _tail = new Node();
+
+    //     _head->_data = value;
+    //     _head->_next = _end;
+    //     _head->_prev = _end;
+
+    //     _flag = 1;
+    // } else if (_flag == 1) {
+    //     _tail->_data = value;
+    //     _head->_next = _tail;
+    //     _tail->_next = _end;
+    //     _end->_next = _head;
+
+    //     _end->_prev = _tail;
+    //     _tail->_prev = _head;
+
+    //     _flag = 2;
+    // } else if (_flag == 2) { 
+    //     Node* tmp = new Node(_tail->_data);
+    //     _tail->_data = value;
+        
+    //     tmp->_prev = _head;
+    //     tmp->_next = _tail;
+        
+    //     _head->_next = tmp;
+    //     _tail->_prev = tmp;
+
+    //     _flag = 3;
+    // } else if (_flag >= 3) {
+    //     Node* tmp = new Node(_tail->_data);
+    //     tmp->_next = _tail;
+    //     tmp->_prev = _tail->_prev;
+
+    //     _tail->_data = value;
+    //     _tail->_prev = tmp;
+    //     _tail->_prev->_prev->_next = _tail->_prev;
+    //     _flag++;
+    // }
+
+
+    Node *tmp = new Node(value);
+    if(_head == nullptr){
+        _head = _tail = tmp;
         _end = new Node();
-        _tail = new Node();
-
-        _head->_data = value;
-        _head->_next = _end;
-        _head->_prev = _end;
-
-        _flag = 1;
-    } else if (_flag == 1) {
-        _tail->_data = value;
-        _head->_next = _tail;
-        _tail->_next = _end;
+        tmp->_prev = _end;
         _end->_next = _head;
-
-        _end->_prev = _tail;
-        _tail->_prev = _head;
-
-        _flag = 2;
-    } else if (_flag == 2) { 
-        Node* tmp = new Node(_tail->_data);
-        _tail->_data = value;
-        
-        tmp->_prev = _head;
-        tmp->_next = _tail;
-        
-        _head->_next = tmp;
-        _tail->_prev = tmp;
-
-        _flag = 3;
-    } else if (_flag >= 3) {
-        Node* tmp = new Node(_tail->_data);
-        tmp->_next = _tail;
-        tmp->_prev = _tail->_prev;
-
-        _tail->_data = value;
-        _tail->_prev = tmp;
-        _tail->_prev->_prev->_next = _tail->_prev;
-        _flag++;
+    } 
+    else {
+        tmp->_prev = _tail;
+        _tail->_next = tmp;
+        _tail = tmp;
     }
+    _end->_prev = _tail;
+    _tail->_next = _end;
+
+
 
 }
 
@@ -154,58 +172,15 @@ void list<T>::push_front(T value){
         _head = _tail = tmp;
         _end = new Node();
         tmp->_next = _end;
-
+        _end->_prev = _tail;
     } else {
         tmp->_next = _head;
         _head->_prev = tmp;
         _head = tmp;
     }
-        _end->_next = _head;
-        _head->_prev = _end;
+    _end->_next = _head;
+    _head->_prev = _end;
 
-
-
-    // Node *tmp = new Node(value);
-    // if (_head == nullptr ) {
-    //     _head = _tail = tmp;
-    //     _head->_next = tmp;
-    //     _head->_prev = _end;
-    //     _head->_prev = _end;
-
-    //     _flag = 1;
-    // } else if (_flag == 1) {
-    //     // _tail->_data = _head->_data;
-    //     // _head->_data = value;
-
-    //     // _head->_next = _tail;
-    //     // _tail->_next = _end;
-    //     // _end->_next = _head;
-
-    //     // _end->_prev = _tail;
-    //     // _tail->_prev = _head;
-
-    //     _flag = 2;
-    // } else if (_flag == 2) { 
-    //     Node* tmp = new Node(_head->_data);
-    //     _head->_data = value;
-        
-    //     tmp->_prev = _head;
-    //     tmp->_next = _tail;
-        
-    //     _head->_next = tmp;
-    //     _tail->_prev = tmp;
-
-    //     _flag = 3;
-    // } else if (_flag >= 3) {
-    //     Node* tmp = new Node(_head->_data);
-    //     tmp->_next = _head->_next;
-    //     tmp->_prev = _head;
-
-    //     _head->_data = value;
-    //     _head->_next = tmp;
-    //     _head->_next->_next->_prev = _head->_next;
-    //     _flag++;
-    // }
 
 }
 
@@ -378,17 +353,20 @@ int main() {
 
     list<int> a;
 
-    a.push_front(2);
-    a.push_front(3);
-    list<int>::iter iterator(a._head);
-    list<int>::iter iterator2(a._head);
+    // a.push_front(2);
+    // a.push_front(3);
+    // a.push_front(4);
+    // a.push_front(5);
+    // a.push_front(6);
+    // list<int>::iter iterator(a._head);
+    // list<int>::iter iterator2(a._head);
 
 
-    bool ans = iterator2==iterator;
-    bool ans2 = iterator2!=iterator;
+    // bool ans = iterator2==iterator;
+    // bool ans2 = iterator2!=iterator;
     
-    std::cout << ans << std::endl;
-    std::cout << ans2 << std::endl;
+    // std::cout << ans << std::endl;
+    // std::cout << ans2 << std::endl;
     // a.push_front(4);
     // a.push_front(5);
     // a.push_front(6);
@@ -404,12 +382,12 @@ int main() {
     // a.pop_front();
     // a.pop_front();
     
-    // a.push_back(2);
-    // a.push_back(3);
-    // a.push_back(4);
-    // a.push_back(5);
-    // a.push_back(6);
-    // a.PrintList();
+    a.push_back(2);
+    a.push_back(3);
+    a.push_back(4);
+    a.push_back(5);
+    a.push_back(6);
+    a.PrintList();
 
     // a.pop_back();
     // a.pop_back();
