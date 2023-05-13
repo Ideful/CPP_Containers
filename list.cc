@@ -1,4 +1,7 @@
 #include "list.h"
+#include <string>
+#include "../../OSNOVA/CPP1_s21_matrixplus-1/src/s21_matrix_oop.h"
+
 template <class T>
 list<T>::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_flag(0) {}
 
@@ -55,8 +58,8 @@ void list<T>::push_back(T value){
         _head->_next = _end;
         _head->_prev = _end;
 
-        _flag = 2;
-    } else if (_flag == 2) {
+        _flag = 1;
+    } else if (_flag == 1) {
         _tail->_data = value;
         _head->_next = _tail;
         _tail->_next = _end;
@@ -65,8 +68,8 @@ void list<T>::push_back(T value){
         _end->_prev = _tail;
         _tail->_prev = _head;
 
-        _flag = 3;
-    } else if (_flag == 3) { 
+        _flag = 2;
+    } else if (_flag == 2) { 
         Node* tmp = new Node(_tail->_data);
         _tail->_data = value;
         
@@ -76,8 +79,8 @@ void list<T>::push_back(T value){
         _head->_next = tmp;
         _tail->_prev = tmp;
 
-        _flag = 4;
-    } else if (_flag >= 4) {
+        _flag = 3;
+    } else if (_flag >= 3) {
         Node* tmp = new Node(_tail->_data);
         tmp->_next = _tail;
         tmp->_prev = _tail->_prev;
@@ -109,8 +112,8 @@ void list<T>::push_front(T value){
         _head->_next = _end;
         _head->_prev = _end;
 
-        _flag = 2;
-    } else if (_flag == 2) {
+        _flag = 1;
+    } else if (_flag == 1) {
         _tail->_data = _head->_data;
         _head->_data = value;
 
@@ -121,8 +124,8 @@ void list<T>::push_front(T value){
         _end->_prev = _tail;
         _tail->_prev = _head;
 
-        _flag = 3;
-    } else if (_flag == 3) { 
+        _flag = 2;
+    } else if (_flag == 2) { 
         Node* tmp = new Node(_head->_data);
         _head->_data = value;
         
@@ -132,8 +135,8 @@ void list<T>::push_front(T value){
         _head->_next = tmp;
         _tail->_prev = tmp;
 
-        _flag = 4;
-    } else if (_flag >= 4) {
+        _flag = 3;
+    } else if (_flag >= 3) {
         Node* tmp = new Node(_head->_data);
         tmp->_next = _head->_next;
         tmp->_prev = _head;
@@ -148,8 +151,8 @@ void list<T>::push_front(T value){
 template <class T>
 void list<T>::pop_back(){
     if(_head == nullptr) throw std::out_of_range("nothing to pop");
-    else if (_flag >2) {
-        if (_flag != 3) {
+    else if (_flag > 1) {
+        if (_flag > 2) {
             _tail->_data = _tail->_prev->_data;
             _tail->_prev = _tail->_prev->_prev;
             _tail->_prev->_next = _tail;
@@ -161,7 +164,7 @@ void list<T>::pop_back(){
             _tail->_prev = _end;
         }
         _flag--;
-    } else if (_flag == 2) {
+    } else if (_flag == 1) {
         delete _head;
         delete _tail;
         delete _end;
@@ -174,10 +177,11 @@ void list<T>::pop_back(){
 template <class T>
 void list<T>::pop_front(){
     if(_head == nullptr) throw std::out_of_range("nothing to pop");
-    else if (_flag >2) {
-        if (_flag != 3) {
+    else if (_flag > 1) {
+        if (_flag > 2) {
             _head->_data = _head->_next->_data;
             _head->_next = _head->_next->_next;
+            delete _head->_next->_prev;
             _head->_next->_prev = _head;
         } else {
             _tail->_data = _head->_data;
@@ -185,10 +189,9 @@ void list<T>::pop_front(){
             _head->_prev = _end;
             _tail->_next = _end;
             _tail->_prev = _end;
-
         }
         _flag--;
-    } else if (_flag == 2) {
+    } else if (_flag == 1) {
         delete _head;
         delete _tail;
         delete _end;
@@ -249,13 +252,19 @@ void list<T>::printList() {
 
 
 int main() {
+    // list<std::string> a;
+    // std::string z("qwe");
+    // std::string q("zxc");
+    // a.push_front(z);
+    // a.push_front(q);
+
     list<int> a;
     a.push_front(2);
     a.push_front(3);
-    a.push_front(4);
-    a.push_front(5);
-    a.push_front(6);
-    a.push_front(7);
+    // a.push_front(4);
+    // a.push_front(5);
+    // a.push_front(6);
+    // a.push_front(7);
 
     // a.pop_front();
     // a.pop_front();
@@ -275,7 +284,8 @@ int main() {
     // a.pop_back();
     // a.pop_back();
     // a.pop_back();
-    a.pop_back();
+    // a.pop_back();
+    a.pop_front();
     // a.pop_back();
 
     // a.push_back(5);
@@ -293,3 +303,4 @@ int main() {
 // template class list<int>;
 // template class list<double>;
 // template class list<float>;
+// template class list<std::string>;

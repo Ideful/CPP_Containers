@@ -45,7 +45,7 @@ void printList();
                 T _data;
                 Node *_prev;
                 Node *_next;
-                Node() : _data(0), _prev(nullptr), _next(nullptr){};
+                Node() : _data(), _prev(nullptr), _next(nullptr){};
                 Node(T value) : _data(value), _prev(nullptr), _next(nullptr){};
                 // ~Node() {delete };
         };
