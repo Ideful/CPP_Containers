@@ -1,6 +1,8 @@
 // #ifdef
 #include <iostream>
 
+template <class T>
+
 class list {
     public:
         list();
@@ -28,8 +30,8 @@ class list {
 // iterator insert(iterator pos, const_reference value); // insert(iterator pos, const_reference value)	inserts elements into concrete pos and returns the iterator that points to the new element
 // void erase(iterator pos);	//erases element at pos
 
-void push_front(int value); //	adds an element to the end
-void push_back(int value); //	adds an element to the head
+void push_front(T value); //	adds an element to the end
+void push_back(T value); //	adds an element to the head
 void pop_front(); //	removes the first element
 void pop_back(); //	removes the last element
 // void swap(list& other);  //	swaps the contents
@@ -40,11 +42,11 @@ void pop_back(); //	removes the last element
 // void sort(); //	sorts the elements
 void printList();
         struct Node{
-                int _data;
+                T _data;
                 Node *_prev;
                 Node *_next;
                 Node() : _data(0), _prev(nullptr), _next(nullptr){};
-                Node(int value) : _data(value), _prev(nullptr), _next(nullptr){};
+                Node(T value) : _data(value), _prev(nullptr), _next(nullptr){};
                 // ~Node() {delete };
         };
         // fields:

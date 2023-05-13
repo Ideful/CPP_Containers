@@ -1,7 +1,6 @@
 #include "list.h"
-
-list::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_flag(0) {
-}
+template <class T>
+list<T>::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_flag(0) {}
 
 // list::list(int n) {
 // // for(int i = 0; i < n;i++) {
@@ -28,11 +27,12 @@ list::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_flag(0) {
 
 // }
 
-list::~list(){
-    // if (_head) delete _head;
-    // if (_tail) delete _tail;
-    // if (_end) delete _end;
-    // _head = _tail = _end = nullptr;
+template <class T>
+list<T>::~list(){
+    if (_head) delete _head;
+    if (_tail) delete _tail;
+    if (_end) delete _end;
+    _head = _tail = _end = nullptr;
 }
 
 
@@ -44,8 +44,8 @@ list::~list(){
 
 
 // }
-
-void list::push_back(int value){
+template <class T>
+void list<T>::push_back(T value){
     if (_head == nullptr || _tail == nullptr || _end == nullptr) {
         _head = new Node();
         _end = new Node();
@@ -90,8 +90,16 @@ void list::push_back(int value){
 
 }
 
-
-void list::push_front(int value){
+template <class T>
+void list<T>::push_front(T value){
+    // Node *node = new Node(value);
+    // if(!head){
+    //     _head = _tail = node;
+    // } else {
+    //     node->_next = _head;
+    //     _head->_prev = node;
+    //     _head = node;
+    // }
     if (_head == nullptr || _tail == nullptr || _end == nullptr) {
         _head = new Node();
         _end = new Node();
@@ -137,7 +145,8 @@ void list::push_front(int value){
     }
 }
 
-void list::pop_back(){
+template <class T>
+void list<T>::pop_back(){
     if(_head == nullptr) throw std::out_of_range("nothing to pop");
     else if (_flag >2) {
         if (_flag != 3) {
@@ -162,8 +171,8 @@ void list::pop_back(){
     }
 }
 
-
-void list::pop_front(){
+template <class T>
+void list<T>::pop_front(){
     if(_head == nullptr) throw std::out_of_range("nothing to pop");
     else if (_flag >2) {
         if (_flag != 3) {
@@ -176,6 +185,7 @@ void list::pop_front(){
             _head->_prev = _end;
             _tail->_next = _end;
             _tail->_prev = _end;
+
         }
         _flag--;
     } else if (_flag == 2) {
@@ -223,7 +233,8 @@ void list::pop_front(){
 
 // }
 
-void list::printList() {
+template <class T>
+void list<T>::printList() {
     int k = 0;
     if (_head != nullptr) {
         while(_head != _end) {
@@ -238,13 +249,13 @@ void list::printList() {
 
 
 int main() {
-    list a;
-    // a.push_front(2);
-    // a.push_front(3);
-    // a.push_front(4);
-    // a.push_front(5);
-    // a.push_front(6);
-    // a.push_front(7);
+    list<int> a;
+    a.push_front(2);
+    a.push_front(3);
+    a.push_front(4);
+    a.push_front(5);
+    a.push_front(6);
+    a.push_front(7);
 
     // a.pop_front();
     // a.pop_front();
@@ -253,21 +264,24 @@ int main() {
     // a.pop_front();
     // a.pop_front();
     
-    a.push_back(2);
-    a.push_back(3);
-    a.push_back(4);
-    a.push_back(5);
-    a.push_back(6);
+    // a.push_back(2);
+    // a.push_back(3);
+    // a.push_back(4);
+    // a.push_back(5);
+    // a.push_back(6);
+    a.printList();
 
-    a.pop_back();
-    a.pop_back();
-    a.pop_back();
-    a.pop_back();
+    // a.pop_back();
+    // a.pop_back();
+    // a.pop_back();
+    // a.pop_back();
     a.pop_back();
     // a.pop_back();
 
     // a.push_back(5);
     a.printList();
+    // a.push_front(7);
+    // a.printList();
     // std::cout << std:: endl;
     // a.printList();
     
@@ -275,3 +289,7 @@ int main() {
     // std::cout << a._next->_data << std::endl;
     // a.printList();
 }
+
+// template class list<int>;
+// template class list<double>;
+// template class list<float>;
