@@ -69,10 +69,10 @@ void PrintList();
                         iter(Node* value);
                         Node* _current_node = nullptr;
                         T& operator*();
-                        // void operator++(list <T> cur_list);
-                        // void operator--(list <T> cur_list);
-                        bool operator==(list <T> cur_list);
-                        bool operator!=(list <T> cur_list);
+                        void operator++();
+                        void operator--();
+                        bool operator==(iter &value);
+                        bool operator!=(iter &value);
         };
 };
 

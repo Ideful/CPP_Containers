@@ -315,17 +315,17 @@ void list<T>::PrintList() {
 }
 
 
-
+// iterator ####################################################################
 
 template <class T>
 list<T>::iter::iter():_current_node(nullptr) { // esli v skobkah _head -> hueta
 }
 
-
-
 template <class T>
 list<T>::iter::iter(Node* value):_current_node(value) { // esli v skobkah _head -> hueta
 }
+
+
 
 template <class T>
 T& list<T>::iter::operator*() {
@@ -334,34 +334,35 @@ T& list<T>::iter::operator*() {
 
 
 
-// template <class T>
-// void list<T>::iter::operator++(list <T> cur_list) {
-
-// }
-
-
-
-// template <class T>
-// void list<T>::iter::operator--(list <T> cur_list) {
-
-// }
-
-
-
 template <class T>
-bool list<T>::iter::operator==(list <T> cur_list) {
-    return true;
+void list<T>::iter::operator++() {
+    _current_node = _current_node->_next;
 }
 
 
 
 template <class T>
-bool list<T>::iter::operator!=(list <T> cur_list) {
-    return true;
+void list<T>::iter::operator--() {
+    _current_node = _current_node->_prev;
 }
 
 
 
+template <class T>
+bool list<T>::iter::operator==(iter &value) {
+    bool ans = false;
+    if (_current_node == value._current_node) ans = true;
+    return ans;
+}
+
+
+template <class T>
+bool list<T>::iter::operator!=(iter &value) {
+    return !operator==(value);
+}
+
+
+// inerator ####################################################################
 
 
 
@@ -379,12 +380,23 @@ int main() {
 
     a.push_front(2);
     a.push_front(3);
-    list<int>::iter q(a._head);
+    list<int>::iter iterator(a._head);
+    list<int>::iter iterator2(a._head);
+
+
+    bool ans = iterator2==iterator;
+    bool ans2 = iterator2!=iterator;
+    
+    std::cout << ans << std::endl;
+    std::cout << ans2 << std::endl;
     // a.push_front(4);
     // a.push_front(5);
     // a.push_front(6);
     // a.push_front(7);
-    std::cout << *q << std::endl;
+    // ++iterator;
+    // ++iterator;
+    // std::cout << *iterator << std::endl;
+    // iterator--;
     // a.pop_front();
     // a.pop_front();
     // a.pop_front();
@@ -397,7 +409,7 @@ int main() {
     // a.push_back(4);
     // a.push_back(5);
     // a.push_back(6);
-    a.PrintList();
+    // a.PrintList();
 
     // a.pop_back();
     // a.pop_back();
