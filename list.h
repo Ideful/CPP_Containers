@@ -1,4 +1,5 @@
-// #ifdef
+#ifndef SRC_LIST_H_
+#define SRC_LIST_H_
 #include <iostream>
 
 template <class T>
@@ -29,7 +30,6 @@ class list {
 // void clear(); //	clears the contents
 // iterator insert(iterator pos, const_reference value); // insert(iterator pos, const_reference value)	inserts elements into concrete pos and returns the iterator that points to the new element
 // void erase(iterator pos);	//erases element at pos
-
 void push_front(T value); //	adds an element to the end
 void push_back(T value); //	adds an element to the head
 void pop_front(); //	removes the first element
@@ -40,21 +40,46 @@ void pop_back(); //	removes the last element
 // void reverse(); //	reverses the order of the elements
 // void unique(); //	removes consecutive duplicate elements
 // void sort(); //	sorts the elements
-void printList();
+void PrintList();
+
+
+        // fields:
         struct Node{
                 T _data;
                 Node *_prev;
                 Node *_next;
                 Node() : _data(), _prev(nullptr), _next(nullptr){};
                 Node(T value) : _data(value), _prev(nullptr), _next(nullptr){};
-                // ~Node() {delete };
+                // ~Node() {
+                //         while(_head->_next != _end) {
+                //                 delete _head->_data;
+                //                 delete _head->_prev;
+                //         }
+                // };
         };
-        // fields:
         Node* _head;
         Node* _tail;
         Node* _end;
         int _flag;
+
+
+        class iter {
+                public:
+                        iter();
+                        iter(Node* value);
+                        Node* _current_node = nullptr;
+                        T& operator*();
+                        // void operator++(list <T> cur_list);
+                        // void operator--(list <T> cur_list);
+                        bool operator==(list <T> cur_list);
+                        bool operator!=(list <T> cur_list);
+        };
 };
+
+// S21Matrix& operator=(const S21Matrix& other);
+// S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
+
+
 
 // Каждый вид контейнеров должен предоставить пользователю следующие методы:
 // -    стандартные конструкторы (конструктор по умолчанию, конструктор копирования, конструктор перемещения, 
@@ -82,5 +107,7 @@ void printList();
 //   но позволяет добавлять и удалять элементы в любой части списка.
 
 
-// #endif
+ #endif //  SRC_LIST_H_
+
+// include tpp i ubrat iz tpp header
 
