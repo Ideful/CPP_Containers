@@ -42,7 +42,6 @@ list<T>::~list(){ // ne rabotaet s 1 elementom
     }
     if (_head) delete _head;
     if (_end) delete _end;
-    // if (_tail) delete _tail;
     // _head = _tail = _end = nullptr;
 }
 
@@ -187,57 +186,41 @@ void list<T>::push_front(T value){
 template <class T>
 void list<T>::pop_back(){
     if(_head == nullptr) throw std::out_of_range("nothing to pop");
-    else if (_flag > 1) {
-        if (_flag > 2) {
-            _tail->_data = _tail->_prev->_data;
-            _tail->_prev = _tail->_prev->_prev;
-            _tail->_prev->_next = _tail;
-        } else {
-            _tail->_data = _head->_data;
-            _head->_next = _end;
-            _head->_prev = _end;
-            _tail->_next = _end;
-            _tail->_prev = _end;
-        }
-        _flag--;
-    } else if (_flag == 1) {
-        delete _head;
-        delete _tail;
-        delete _end;
-        _head = nullptr;
-        _tail = nullptr;
-        _end = nullptr;
+    else {
+        Node * tmp = _tail->_prev;
+        _tail = tmp;
+        _tail->_next = _end;    
+
     }
 }
+
+
 
 template <class T>
 void list<T>::pop_front(){
     if(_head == nullptr) throw std::out_of_range("nothing to pop");
-    else if (_flag > 1) {
-        if (_flag > 2) {
-            _head->_data = _head->_next->_data;
-            _head->_next = _head->_next->_next;
-            delete _head->_next->_prev;
-            _head->_next->_prev = _head;
-        } else {
-            _tail->_data = _head->_data;
-            _head->_next = _end;
-            _head->_prev = _end;
-            _tail->_next = _end;
-            _tail->_prev = _end;
-        }
-        _flag--;
-    } else if (_flag == 1) {
-        delete _head;
-        delete _tail;
-        delete _end;
-        _head = nullptr;
-        _tail = nullptr;
-        _end = nullptr;
+    else {
+        Node * tmp = _head->_next;
+        _head = tmp;
+        _head->_prev = _end;
+        _end->_next = _head;
     }
 }
 
 
+
+template <class T>
+int list<T>::size() { // ne rabotaet s pop'om. hz po4
+    if(_head == nullptr) throw std::out_of_range("list is empty");
+    int res = 0;
+    while(_head != _end) {
+        _head = _head->_next;
+        res++;
+    }
+    _head = _end->_next;
+
+    return res;
+}
 
 
 
@@ -254,12 +237,15 @@ void list<T>::pop_front(){
 
 // }
 
+template <class T>
+void list<T>::reverse(){
+    // while(_head != _end) {
+    //     Node* tmp 
+    //     _head=_head->_next;
+    // }
 
-// void list::reverse(){
 
-
-
-// }
+}
 
 
 // void list::unique(){
@@ -367,10 +353,11 @@ int main() {
     
     // std::cout << ans << std::endl;
     // std::cout << ans2 << std::endl;
-    // a.push_front(4);
-    // a.push_front(5);
-    // a.push_front(6);
-    // a.push_front(7);
+    a.push_front(4);
+    a.push_front(5);
+    a.push_front(6);
+    a.push_front(7);
+    a.push_front(8);
     // ++iterator;
     // ++iterator;
     // std::cout << *iterator << std::endl;
@@ -382,14 +369,26 @@ int main() {
     // a.pop_front();
     // a.pop_front();
     
-    a.push_back(2);
-    a.push_back(3);
-    a.push_back(4);
-    a.push_back(5);
-    a.push_back(6);
-    a.PrintList();
+    // a.push_back(2);
+    // a.push_back(3);
+    // a.push_back(4);
+    // a.push_back(5);
+    // a.push_back(6);
+    // std::cout << a.size() << '\n' << std::endl;
+    // a.pop_front();
+    // a.pop_front();
+    // a.pop_front();
+    // a.pop_front();
+    // a.pop_front();
 
-    // a.pop_back();
+    a.pop_back();
+    a.pop_back();
+    // a.push_front(5);
+
+
+    a.PrintList();
+    std::cout << a.size() << std::endl;
+    
     // a.pop_back();
     // a.pop_back();
     // a.pop_back();
