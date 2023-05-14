@@ -2,7 +2,7 @@
 // #include <string>
 
 template <class T>
-list<T>::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_flag(0) {}
+list<T>::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_size(0) {}
 
 // list::list(int n) {
 // // for(int i = 0; i < n;i++) {
@@ -41,7 +41,7 @@ list<T>::~list(){ // ne rabotaet s 1 elementom
         }
     }
     if (_head) delete _head;
-    if (_end) delete _end;
+    if (_end && _end != _head) delete _end;
     // _head = _tail = _end = nullptr;
 }
 
@@ -113,7 +113,7 @@ void list<T>::push_back(T value){
     }
     _end->_prev = _tail;
     _tail->_next = _end;
-
+    _size++;
 
 
 }
@@ -179,7 +179,7 @@ void list<T>::push_front(T value){
     }
     _end->_next = _head;
     _head->_prev = _end;
-
+    _size++;
 
 }
 
@@ -190,8 +190,9 @@ void list<T>::pop_back(){
         Node * tmp = _tail->_prev;
         _tail = tmp;
         _tail->_next = _end;    
-
+        _end->_prev = _tail;
     }
+    _size--;
 }
 
 
@@ -205,6 +206,7 @@ void list<T>::pop_front(){
         _head->_prev = _end;
         _end->_next = _head;
     }
+    _size--;
 }
 
 
@@ -239,12 +241,23 @@ int list<T>::size() { // ne rabotaet s pop'om. hz po4
 
 template <class T>
 void list<T>::reverse(){
-    // while(_head != _end) {
-    //     Node* tmp 
-    //     _head=_head->_next;
-    // }
+    list<T>::iter iterator_head(_head);
+    list<T>::iter iterator_tail(_tail);
+    Node * tmp_h = _head;
+    Node * tmp_t = _tail;
+    T data = *iterator_head;
 
+    for(int i = 0; i < _size/2;i++) {
+        tmp_h->_data = *iterator_tail;
+        tmp_t->_data = data;
 
+        tmp_h = tmp_h->_next;
+        tmp_t = tmp_t->_prev;
+
+        data = tmp_h->_data;
+        ++iterator_head;
+        --iterator_tail;
+    }
 }
 
 
@@ -254,12 +267,12 @@ void list<T>::reverse(){
 
 // }
 
+template <class T>
+void list<T>::sort(){
+    
 
-// void list::sort(){
 
-
-
-// }
+}
 
 template <class T>
 void list<T>::PrintList() {
@@ -344,33 +357,38 @@ int main() {
     // a.push_front(4);
     // a.push_front(5);
     // a.push_front(6);
+
+
+
+
+    // std::cout << ans << std::endl;
+    // std::cout << ans2 << std::endl;
+    a.push_front(223);
+    a.push_front(4);
+    a.push_front(5);
+    // a.push_front(6);
+    // a.push_front(7);
+    // a.push_front(8);
+
+
     // list<int>::iter iterator(a._head);
     // list<int>::iter iterator2(a._head);
-
-
     // bool ans = iterator2==iterator;
     // bool ans2 = iterator2!=iterator;
     
-    // std::cout << ans << std::endl;
-    // std::cout << ans2 << std::endl;
-    a.push_front(4);
-    a.push_front(5);
-    a.push_front(6);
-    a.push_front(7);
-    a.push_front(8);
     // ++iterator;
     // ++iterator;
     // std::cout << *iterator << std::endl;
     // iterator--;
-    // a.pop_front();
+    a.pop_front();
     // a.pop_front();
     // a.pop_front();
     // a.pop_front();
     // a.pop_front();
     // a.pop_front();
     
-    // a.push_back(2);
-    // a.push_back(3);
+    a.push_back (2);
+    a.push_back(3);
     // a.push_back(4);
     // a.push_back(5);
     // a.push_back(6);
@@ -381,13 +399,15 @@ int main() {
     // a.pop_front();
     // a.pop_front();
 
-    a.pop_back();
-    a.pop_back();
+    // a.pop_back();
+    // a.pop_back();
     // a.push_front(5);
 
 
     a.PrintList();
-    std::cout << a.size() << std::endl;
+    a.reverse();
+    a.PrintList();
+    // std::cout << a.size() << std::endl;
     
     // a.pop_back();
     // a.pop_back();

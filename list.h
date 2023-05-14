@@ -42,7 +42,7 @@ void pop_back(); //	removes the last element
 // // void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
 void reverse(); //	reverses the order of the elements
 // void unique(); //	removes consecutive duplicate elements
-// void sort(); //	sorts the elements
+void sort(); //	sorts the elements
 void PrintList();
 
 
@@ -63,7 +63,7 @@ void PrintList();
         Node* _head;
         Node* _tail;
         Node* _end;
-        int _flag;
+        int _size;
 
 
         class iter {
