@@ -7,11 +7,11 @@ template <class T>
 class list {
     public:
         list();
-        // list(int n); */ size_type n /*
-        // list(const list &l);
-        // list(list &&l);
+        list(int n); /* size_type n */
+        list(const list &l);
+        list(list &&l);
         ~list();
-        // list operator=(list &&l);
+        void operator=(list &&l);
 
         // List Element access
 // const_reference front()	access the first element
@@ -22,7 +22,7 @@ class list {
 // iterator end()	returns an iterator to the end
 
         // List Capacity
-// bool empty()	checks whether the container is empty
+bool empty(); //	checks whether the container is empty
 
 // size_type size()	returns the number of elements
 int size();
@@ -30,7 +30,7 @@ int size();
 // size_type max_size()	returns the maximum possible number of elements
         
         // List Modifiers
-// void clear(); //	clears the contents
+void clear(); //	clears the contents
 // insert(iterator pos, const_reference value)	inserts elements into concrete pos and returns the iterator that points to the new element
 // void erase(iterator pos);	//erases element at pos
 void push_front(T value); //	adds an element to the end

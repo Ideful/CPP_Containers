@@ -4,30 +4,86 @@
 template <class T>
 list<T>::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_size(0) {}
 
-// list::list(int n) {
-// // for(int i = 0; i < n;i++) {
+template <class T>
+list<T>::list(int n):list() {
+    Node *tmp = new Node();
 
-// // }
+    for(int i = 0; i < n; i++) {
+        if (_head == nullptr) {
+            _head = _tail = tmp;
+            _end = new Node();
+            tmp->_next = _end;
+            _end->_prev = _tail;
+        } else {
+            tmp->_next = _head;
+            _head->_prev = tmp;
+            _head = tmp;
+        }
+        _end->_next = _head;
+        _head->_prev = _end;
+        _size++;
+    }
+    
+    // if(_head == nullptr){
+    //     _head = _tail = tmp;
+    //     _end = new Node();
+    //     tmp->_next = _end;
+    //     _end->_prev = _tail;
+    // } else {
+    //     for(int i = 0; i < _size - 1; i++) {
+    //         tmp->_next = _head;
+    //         _head->_prev = tmp;
+    //         _head = tmp;
+    //     }
+    // }
 
-// }
+    // _end->_next = _head;
+    // _head->_prev = _end;
+    // _size++;
 
-// list::list(const list &l) {
-
-
-
-// }
-
-// list::list(list&& l) {
+}
 
 
-
-// }
-
-// list list::operator=(list &&l) {
+template <class T>
+list<T>::list(const list &l) {
 
 
+}
 
-// }
+
+template <class T>
+list<T>::list(list&& l) {
+    // _head = l._head;
+    // _tail = l._tail;
+
+
+
+}
+template <class T>
+void list<T>::operator=(list &&l) {
+    // malloc
+    // while(l._head != l._end) {
+
+    //     l._head = l._head->next;
+    // }
+
+
+}
+
+
+// tipa da, no net)
+template <class T>
+bool list <T>::empty(){
+    bool ans = false;
+    if (_head == _tail) ans = true; // v1
+    // while(_head != _end) {
+    //     if (_head != _head->_next) ans = true;
+    //     _head = _head->_next;
+    // }
+
+
+    return ans;
+}
 
 template <class T>
 list<T>::~list(){ // ne rabotaet s 1 elementom
@@ -48,12 +104,21 @@ list<T>::~list(){ // ne rabotaet s 1 elementom
 
 // ######################################################
 
+template <class T>
+void list<T>::clear() {
+    Node *tmp = _head;
+    for(int i = 0; i < _size; i++) {
+        //
 
-// void list::clear() {
 
 
 
-// }
+        // tmp->_data = 0;
+        tmp = tmp->_next;
+    }
+}
+
+
 template <class T>
 void list<T>::push_back(T value){
     // if (_head == nullptr || _tail == nullptr || _end == nullptr) {
@@ -247,7 +312,7 @@ void list<T>::reverse(){
     Node * tmp_t = _tail;
     T data = *iterator_head;
 
-    for(int i = 0; i < _size/2;i++) {
+    for(int i = 0; i < _size / 2;i++) {
         tmp_h->_data = *iterator_tail;
         tmp_t->_data = data;
 
@@ -269,7 +334,7 @@ void list<T>::reverse(){
 
 template <class T>
 void list<T>::sort(){
-    
+
 
 
 }
@@ -350,7 +415,7 @@ int main() {
     // a.push_front(z);
     // a.push_front(q);
 
-    list<int> a;
+    list<int> a(12);
 
     // a.push_front(2);
     // a.push_front(3);
@@ -363,9 +428,9 @@ int main() {
 
     // std::cout << ans << std::endl;
     // std::cout << ans2 << std::endl;
-    a.push_front(223);
-    a.push_front(4);
-    a.push_front(5);
+    // a.push_front(223);
+    // a.push_front(4);
+    // a.push_front(5);
     // a.push_front(6);
     // a.push_front(7);
     // a.push_front(8);
@@ -380,19 +445,21 @@ int main() {
     // ++iterator;
     // std::cout << *iterator << std::endl;
     // iterator--;
-    a.pop_front();
+    // a.pop_front();
     // a.pop_front();
     // a.pop_front();
     // a.pop_front();
     // a.pop_front();
     // a.pop_front();
     
-    a.push_back (2);
-    a.push_back(3);
+    // std::cout << a.size() << '\n' << a.empty() <<  std::endl;
+
+
+    // a.push_back (2);
+    // a.push_back(3);
     // a.push_back(4);
     // a.push_back(5);
     // a.push_back(6);
-    // std::cout << a.size() << '\n' << std::endl;
     // a.pop_front();
     // a.pop_front();
     // a.pop_front();
@@ -405,8 +472,11 @@ int main() {
 
 
     a.PrintList();
-    a.reverse();
-    a.PrintList();
+    // a.reverse();
+    // a.PrintList();
+    // a.reverse();
+    // a.PrintList();
+    
     // std::cout << a.size() << std::endl;
     
     // a.pop_back();
