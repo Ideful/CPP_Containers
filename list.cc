@@ -6,47 +6,43 @@ list<T>::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_size(0) {}
 
 template <class T>
 list<T>::list(int n):list() {
-    Node *tmp = new Node();
-
+// throw n < 1     throw std::out_of_range("Incorrect input");
     for(int i = 0; i < n; i++) {
+        Node *tmp = new Node();
         if (_head == nullptr) {
             _head = _tail = tmp;
             _end = new Node();
-            tmp->_next = _end;
+
+            _head->_next = tmp;
+            tmp->_next = _tail;
+            _tail->_next = _end;
+
             _end->_prev = _tail;
+            _tail->_prev = tmp;
+            tmp->_prev = _head;
         } else {
-            tmp->_next = _head;
-            _head->_prev = tmp;
-            _head = tmp;
+            tmp->_next = _head->_next;
+            tmp->_prev = _head;
+
+            _head->_next->_prev = tmp;
+            _head->_next = tmp;
         }
         _end->_next = _head;
         _head->_prev = _end;
         _size++;
     }
-    
-    // if(_head == nullptr){
-    //     _head = _tail = tmp;
-    //     _end = new Node();
-    //     tmp->_next = _end;
-    //     _end->_prev = _tail;
-    // } else {
-    //     for(int i = 0; i < _size - 1; i++) {
-    //         tmp->_next = _head;
-    //         _head->_prev = tmp;
-    //         _head = tmp;
-    //     }
-    // }
-
-    // _end->_next = _head;
-    // _head->_prev = _end;
-    // _size++;
-
 }
 
 
 template <class T>
-list<T>::list(const list &l) {
-
+list<T>::list(const list &l) : list(l._size) {
+    iter iter(l._head);
+    while(_head != _end) {
+        _head->_data = *iter;
+        _head = _head->_next;
+        ++iter;
+    }
+    _head = _end->_next; 
 
 }
 
@@ -60,28 +56,15 @@ list<T>::list(list&& l) {
 
 }
 template <class T>
-void list<T>::operator=(list &&l) {
+void list<T>::operator=(list &&l)  {
+    // udalit' vse soderjimoe
     // malloc
-    // while(l._head != l._end) {
-
-    //     l._head = l._head->next;
-    // }
-
-
+    // equalizing
 }
 
-
-// tipa da, no net)
 template <class T>
 bool list <T>::empty(){
-    bool ans = false;
-    if (_head == _tail) ans = true; // v1
-    // while(_head != _end) {
-    //     if (_head != _head->_next) ans = true;
-    //     _head = _head->_next;
-    // }
-
-
+    bool ans = (_head == nullptr) ? true : false;
     return ans;
 }
 
@@ -92,13 +75,15 @@ list<T>::~list(){ // ne rabotaet s 1 elementom
             Node *tmp = _head->_next;
             delete _head;
             _head = tmp;
+            // delete tmp;
             // _head = _head->_next;
             // delete _head->_prev;
         }
     }
     if (_head) delete _head;
+    if (_tail && _tail != _head) delete _tail;
     if (_end && _end != _head) delete _end;
-    // _head = _tail = _end = nullptr;
+    _head = _tail = _end = nullptr;
 }
 
 
@@ -107,62 +92,15 @@ list<T>::~list(){ // ne rabotaet s 1 elementom
 template <class T>
 void list<T>::clear() {
     Node *tmp = _head;
-    for(int i = 0; i < _size; i++) {
-        //
-
-
-
-
-        // tmp->_data = 0;
-        tmp = tmp->_next;
+    while(tmp != _end) {
+        tmp->_data = 0; // a esli eto ne chislo???
+        tmp=tmp->_next;
     }
 }
 
 
 template <class T>
 void list<T>::push_back(T value){
-    // if (_head == nullptr || _tail == nullptr || _end == nullptr) {
-    //     _head = new Node();
-    //     _end = new Node();
-    //     _tail = new Node();
-
-    //     _head->_data = value;
-    //     _head->_next = _end;
-    //     _head->_prev = _end;
-
-    //     _flag = 1;
-    // } else if (_flag == 1) {
-    //     _tail->_data = value;
-    //     _head->_next = _tail;
-    //     _tail->_next = _end;
-    //     _end->_next = _head;
-
-    //     _end->_prev = _tail;
-    //     _tail->_prev = _head;
-
-    //     _flag = 2;
-    // } else if (_flag == 2) { 
-    //     Node* tmp = new Node(_tail->_data);
-    //     _tail->_data = value;
-        
-    //     tmp->_prev = _head;
-    //     tmp->_next = _tail;
-        
-    //     _head->_next = tmp;
-    //     _tail->_prev = tmp;
-
-    //     _flag = 3;
-    // } else if (_flag >= 3) {
-    //     Node* tmp = new Node(_tail->_data);
-    //     tmp->_next = _tail;
-    //     tmp->_prev = _tail->_prev;
-
-    //     _tail->_data = value;
-    //     _tail->_prev = tmp;
-    //     _tail->_prev->_prev->_next = _tail->_prev;
-    //     _flag++;
-    // }
-
 
     Node *tmp = new Node(value);
     if(_head == nullptr){
@@ -179,101 +117,91 @@ void list<T>::push_back(T value){
     _end->_prev = _tail;
     _tail->_next = _end;
     _size++;
-
-
 }
 
 template <class T>
 void list<T>::push_front(T value){
 
-    // if (_head == nullptr || _tail == nullptr || _end == nullptr) {
-    //     _head = new Node();
-    //     _end = new Node();
-    //     _tail = new Node();
-
-    //     _head->_data = value;
-    //     _head->_next = _end;
-    //     _head->_prev = _end;
-
-    //     _flag = 1;
-    // } else if (_flag == 1) {
-    //     _tail->_data = _head->_data;
-    //     _head->_data = value;
-
-    //     _head->_next = _tail;
-    //     _tail->_next = _end;
-    //     _end->_next = _head;
-
-    //     _end->_prev = _tail;
-    //     _tail->_prev = _head;
-
-    //     _flag = 2;
-    // } else if (_flag == 2) { 
-    //     Node* tmp = new Node(_head->_data);
-    //     _head->_data = value;
-        
-    //     tmp->_prev = _head;
-    //     tmp->_next = _tail;
-        
-    //     _head->_next = tmp;
-    //     _tail->_prev = tmp;
-
-    //     _flag = 3;
-    // } else if (_flag >= 3) {
-    //     Node* tmp = new Node(_head->_data);
-    //     tmp->_next = _head->_next;
-    //     tmp->_prev = _head;
-
-    //     _head->_data = value;
-    //     _head->_next = tmp;
-    //     _head->_next->_next->_prev = _head->_next;
-    //     _flag++;
-    // }
-
-
     Node *tmp = new Node(value);
-    if(_head == nullptr){
+    if (!_head) {
         _head = _tail = tmp;
         _end = new Node();
-        tmp->_next = _end;
+
+        _head->_next = tmp;
+        tmp->_next = _tail;
+        _tail->_next = _end;
+
         _end->_prev = _tail;
+        _tail->_prev = tmp;
+        tmp->_prev = _head;
     } else {
         tmp->_next = _head;
         _head->_prev = tmp;
         _head = tmp;
+
     }
     _end->_next = _head;
     _head->_prev = _end;
+
+    
+    // Node *tmp = new Node(value);
+    // if(_head == nullptr){
+    //     _head = _tail = tmp;
+    //     _end = new Node();
+    //     tmp->_next = _end;
+    //     _end->_prev = _tail;
+    // } else {
+    //     tmp->_next = _head;
+    //     _head->_prev = tmp;
+    //     _head = tmp;
+    // }
+    // _end->_next = _head;
+    // _head->_prev = _end;
     _size++;
 
 }
 
 template <class T>
-void list<T>::pop_back(){
-    if(_head == nullptr) throw std::out_of_range("nothing to pop");
-    else {
-        Node * tmp = _tail->_prev;
-        _tail = tmp;
-        _tail->_next = _end;    
-        _end->_prev = _tail;
-    }
-    _size--;
-}
-
-
-
-template <class T>
-void list<T>::pop_front(){
-    if(_head == nullptr) throw std::out_of_range("nothing to pop");
+void list<T>::pop_front(){ // leaks 100%
+    if (_head == nullptr) throw std::out_of_range("nothing to pop");
+    if (_size == 1) {
+        delete _end;
+        delete _head;
+        _head = _tail = _end = nullptr;
+    } 
     else {
         Node * tmp = _head->_next;
         _head = tmp;
+        tmp = tmp->_prev;
+        delete tmp;
+
         _head->_prev = _end;
         _end->_next = _head;
     }
     _size--;
 }
 
+
+
+template <class T>
+void list<T>::pop_back(){
+    if(_head == nullptr) throw std::out_of_range("nothing to pop");
+    if (_size == 1) {
+        delete _end;
+        delete _tail;
+        _head = _tail = _end = nullptr;
+    } 
+    else{
+        Node * tmp = _tail->_prev;
+        _tail = tmp;
+        tmp = tmp->_next;
+        delete tmp;
+
+        _tail->_next = _end;    
+        _end->_prev = _tail;
+    }
+    _size--;
+}
 
 
 template <class T>
@@ -306,8 +234,9 @@ int list<T>::size() { // ne rabotaet s pop'om. hz po4
 
 template <class T>
 void list<T>::reverse(){
-    list<T>::iter iterator_head(_head);
-    list<T>::iter iterator_tail(_tail);
+    // throw 0 elements
+    iter iterator_head(_head);
+    iter iterator_tail(_tail);
     Node * tmp_h = _head;
     Node * tmp_t = _tail;
     T data = *iterator_head;
@@ -326,15 +255,21 @@ void list<T>::reverse(){
 }
 
 
-// void list::unique(){
+template <class T>
+void list<T>::unique(){
+    iter end_iter(_end);
+    iter tmp;
+    for(iter iter(_head); iter != end_iter;++iter) {
+        for(iter iter2(_head); iter2 != end_iter;++iter2) {
+            
+        }
+    }
 
-
-
-// }
+}
 
 template <class T>
 void list<T>::sort(){
-
+// throw if T is not a number
 
 
 }
@@ -415,15 +350,17 @@ int main() {
     // a.push_front(z);
     // a.push_front(q);
 
-    list<int> a(12);
-
-    // a.push_front(2);
-    // a.push_front(3);
-    // a.push_front(4);
-    // a.push_front(5);
+    // list<int> a(4);
+    list<int> a;
+    a.push_front(1);
+    a.push_front(2);
+    a.push_front(3);
+    a.push_front(4);
+    a.push_front(5);
+    // a.push_back(0);
     // a.push_front(6);
-
-
+    // list<int>b(a);
+    // b.PrintList();
 
 
     // std::cout << ans << std::endl;
@@ -445,14 +382,14 @@ int main() {
     // ++iterator;
     // std::cout << *iterator << std::endl;
     // iterator--;
-    // a.pop_front();
-    // a.pop_front();
-    // a.pop_front();
-    // a.pop_front();
-    // a.pop_front();
+    a.pop_front();
+    a.pop_front();
+    a.pop_front();
+    a.pop_front();
+    a.pop_front();
     // a.pop_front();
     
-    // std::cout << a.size() << '\n' << a.empty() <<  std::endl;
+    // std::cout << a.empty()<< '\n' << a.size()  <<  std::endl;
 
 
     // a.push_back (2);
@@ -472,6 +409,7 @@ int main() {
 
 
     a.PrintList();
+
     // a.reverse();
     // a.PrintList();
     // a.reverse();

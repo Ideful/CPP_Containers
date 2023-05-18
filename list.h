@@ -41,7 +41,8 @@ void pop_back(); //	removes the last element
 // void merge(list& other); //	merges two sorted lists
 // // void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
 void reverse(); //	reverses the order of the elements
-// void unique(); //	removes consecutive duplicate elements
+void unique(); //	removes consecutive duplicate elements
+// 2 3 4 6 6 6 7  2 4 6 2
 void sort(); //	sorts the elements
 void PrintList();
 
@@ -110,3 +111,9 @@ void PrintList();
 
 // include tpp i ubrat iz tpp header
 
+        // using value_type = T;
+        // using reference = T &;
+        // using const_reference = const T &;
+        // using iterator = T *;
+        // using const_iterator = const T *;
+        // using size_type = size_t;
