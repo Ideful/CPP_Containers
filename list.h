@@ -16,7 +16,6 @@ class list {
         using value_type = T;
         using reference = T &;
         using const_reference = const T &;
-        // using iterator = iter;
         // using const_iterator = iter<T>; //???
         using size_type = size_t;
 
@@ -36,7 +35,7 @@ bool empty(); //	checks whether the container is empty
 int size();
 
 // size_type max_size()	returns the maximum possible number of elements
-        
+ 
         // List Modifiers
 void clear(); //	clears the contents
 // insert(iterator pos, const_reference value)	inserts elements into concrete pos and returns the iterator that points to the new element
@@ -86,10 +85,13 @@ void PrintList();
                         void operator--();
                         bool operator==(iter &value);
                         bool operator!=(iter &value);
+
         };
+        using iterator = iter;
         public:
         void erase(iter pos);	//erases element at pos
-
+        iter Begin();
+        iter End();  
 };
 
 

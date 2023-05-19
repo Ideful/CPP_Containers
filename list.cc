@@ -218,6 +218,16 @@ int list<T>::size() { // ne rabotaet s pop'om. hz po4
 }
 
 
+template <class T>
+typename list<T>::iter list<T>::Begin() {
+    return _head;
+}
+
+
+template <class T>
+typename list<T>::iter  list<T>::End() {
+    return _end;
+}
 
 // void list::swap(list& other){
 
@@ -267,22 +277,19 @@ void list<T>::erase(iter pos) {
             // throw?
         } else {
             // iter tmp_iter(pos._current_node->_prev);
-            // std::cout << &pos << " ";
-            // std::cout << &tmp << "\n";
             pos._current_node->_prev->_next = pos._current_node->_next;
             pos._current_node->_next->_prev = pos._current_node->_prev;
-            // Node* tmp = pos._current_node->_prev;
             Node* tmp = pos._current_node;
             pos._current_node = pos._current_node->_prev;
-            delete tmp;     // LEAK IDK HOW TO FIX
+            delete tmp;     // LEAK IDK HOW TO FIX when erase, ++, erase
+            tmp = nullptr;
+            // Node* tmp = pos._current_node->_prev;
             // delete pos._current_node; //udalaet tmp nahuy
             // --pos;
             // pos = tmp;
-            // std::cout << &pos << " ";
-            // std::cout << &tmp << "\n\n\n";
         }
     }
-
+    _size--;
 }
 
 
@@ -290,8 +297,17 @@ template <class T>
 void list<T>::unique(){
     iter end_iter(_end);
     for(iter iter_i(_head); iter_i != end_iter; ++iter_i) {
+        int counter = 0;
         for(iter iter_j(iter_i._current_node->_next); iter_j != end_iter; ++iter_j) {
-            if (*iter_i == *iter_j) erase(iter_j);
+            if (*iter_i == *iter_j){ 
+                erase(iter_j);
+                iter_j = Begin();
+                for(int i = 0; i < counter; i++) {
+                    iter_j._current_node = iter_j._current_node->_next;
+                }
+            }
+            // if (*iter_i == *iter_j) erase(iter_j), iter_j = Begin();
+            counter++;
         }
     }
 
@@ -397,10 +413,11 @@ int main() {
     a.push_front(1);
     a.push_front(2);
     a.push_front(3);
-    a.push_front(4);
-    a.push_front(5);
-    a.push_front(8);
-    a.push_front(3);
+    // a.push_front(4);
+    // a.push_front(5);
+    // a.push_front(1);
+    // a.push_front(2);
+    // a.push_front(1);
     a.PrintList();
 
     // a.push_back(0);
@@ -425,10 +442,10 @@ int main() {
     // bool ans2 = iterator2!=iterator;
     
     // ++iterator;
-    a.erase(iterator);
-    // std::cout << &iterator << " ";
-    ++iterator;
-    a.erase(iterator);
+    // a.erase(iterator);
+    // // std::cout << &iterator << " ";
+    // ++iterator;
+    // a.erase(iterator);
     // std::cout << &iterator;
     // ++iterator;
     // a.erase(iterator);
@@ -466,9 +483,9 @@ int main() {
     // a.push_front(5);
 
 
-    a.PrintList();
-    // a.unique();
     // a.PrintList();
+    a.unique();
+    a.PrintList();
 
 
     // a.reverse();
