@@ -6,18 +6,21 @@ template <class T>
 
 class list {
     public:
-        list();
-        list(int n); /* size_type n */
-        list(const list &l);
-        list(list &&l);
-        ~list();
-        void operator=(list &&l);
 
         using value_type = T;
         using reference = T &;
         using const_reference = const T &;
         // using const_iterator = iter<T>; //???
         using size_type = size_t;
+
+        list();
+        list(size_type n); /* size_type n */
+        list(const list &l);
+        list(list &&l);
+        ~list();
+        void operator=(list &&l);
+
+
 
 
         // List Element access
@@ -34,7 +37,7 @@ bool empty(); //	checks whether the container is empty
 // size_type size()	returns the number of elements
 int size();
 
-// size_type max_size()	returns the maximum possible number of elements
+size_type max_size();	
  
         // List Modifiers
 void clear(); //	clears the contents
@@ -48,7 +51,6 @@ void pop_back(); //	removes the last element
 // // void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
 void reverse(); //	reverses the order of the elements
 void unique(); //	removes consecutive duplicate elements
-// 2 3 4 6 6 6 7  2 4 6 2
 void sort(); //	sorts the elements
 void PrintList();
 

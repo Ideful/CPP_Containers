@@ -5,7 +5,7 @@ template <class T>
 list<T>::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_size(0) {}
 
 template <class T>
-list<T>::list(int n):list() {
+list<T>::list(size_type n):list() {
 // throw n < 1     throw std::out_of_range("Incorrect input");
     for(int i = 0; i < n; i++) {
         Node *tmp = new Node();
@@ -81,11 +81,21 @@ list<T>::~list(){ // ne rabotaet s 1 elementom
         }
     }
     if (_head) delete _head;
-    if (_tail && _tail != _head) delete _tail;
+    // if (_tail) delete _tail;
     if (_end && _end != _head) delete _end;
     _head = _tail = _end = nullptr;
 }
 
+template <class T>
+typename list<T>::size_type list<T>::max_size(){
+    size_type counter = 0;
+    Node * tmp(_head);
+    while(tmp != _end) {
+        tmp = tmp->_next;
+        counter++;
+    }
+    return counter;
+}
 
 // ######################################################
 
@@ -296,19 +306,25 @@ void list<T>::erase(iter pos) {
 template <class T>
 void list<T>::unique(){
     iter end_iter(_end);
+    // int c1 = 0;
     for(iter iter_i(_head); iter_i != end_iter; ++iter_i) {
-        int counter = 0;
+        // int c2 = 0;
         for(iter iter_j(iter_i._current_node->_next); iter_j != end_iter; ++iter_j) {
             if (*iter_i == *iter_j){ 
                 erase(iter_j);
-                iter_j = Begin();
-                for(int i = 0; i < counter; i++) {
-                    iter_j._current_node = iter_j._current_node->_next;
-                }
+                // c1--;
+                // iter_j = Begin();
+                iter_j = iter_i._current_node->_next;
+                // int counter = c1+c2;
+                // for(int i = 0; i < counter-1; i++) {
+                //     iter_j._current_node = iter_j._current_node->_next;
+                // }
             }
             // if (*iter_i == *iter_j) erase(iter_j), iter_j = Begin();
-            counter++;
+            // PrintList();
+            // c2++;
         }
+        // c1++;
     }
 
 }
@@ -413,19 +429,20 @@ int main() {
     a.push_front(1);
     a.push_front(2);
     a.push_front(3);
-    // a.push_front(4);
-    // a.push_front(5);
-    // a.push_front(1);
-    // a.push_front(2);
-    // a.push_front(1);
+    a.push_front(4);
+    a.push_front(5);
+    a.push_front(1);
+    a.push_front(2);
+    a.push_front(1);
+    a.push_front(2);
     a.PrintList();
 
     // a.push_back(0);
     // a.push_front(6);
     // list<int>b(a);
     // b.PrintList();
-
-
+    // list<int> b(3);
+    // std::cout << b.max_size();
     // std::cout << ans << std::endl;
     // std::cout << ans2 << std::endl;
     // a.push_front(223);
@@ -436,7 +453,7 @@ int main() {
     // a.push_front(8);
 
 
-    list<int>::iter iterator(a._head);
+    // list<int>::iter iterator(a._head);
     // list<int>::iter iterator2(a._head);
     // bool ans = iterator2==iterator;
     // bool ans2 = iterator2!=iterator;
