@@ -13,6 +13,14 @@ class list {
         ~list();
         void operator=(list &&l);
 
+        using value_type = T;
+        using reference = T &;
+        using const_reference = const T &;
+        // using iterator = iter;
+        // using const_iterator = iter<T>; //???
+        using size_type = size_t;
+
+
         // List Element access
 // const_reference front()	access the first element
 // const_reference back()	access the last element
@@ -32,7 +40,6 @@ int size();
         // List Modifiers
 void clear(); //	clears the contents
 // insert(iterator pos, const_reference value)	inserts elements into concrete pos and returns the iterator that points to the new element
-// void erase(iterator pos);	//erases element at pos
 void push_front(T value); //	adds an element to the end
 void push_back(T value); //	adds an element to the head
 void pop_front(); //	removes the first element
@@ -71,6 +78,8 @@ void PrintList();
                 public:
                         iter();
                         iter(Node* value);
+                        iter(const iter &value);
+                        ~iter();
                         Node* _current_node = nullptr;
                         T& operator*();
                         void operator++();
@@ -78,6 +87,9 @@ void PrintList();
                         bool operator==(iter &value);
                         bool operator!=(iter &value);
         };
+        public:
+        void erase(iter pos);	//erases element at pos
+
 };
 
 
@@ -111,9 +123,3 @@ void PrintList();
 
 // include tpp i ubrat iz tpp header
 
-        // using value_type = T;
-        // using reference = T &;
-        // using const_reference = const T &;
-        // using iterator = T *;
-        // using const_iterator = const T *;
-        // using size_type = size_t;

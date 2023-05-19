@@ -234,7 +234,7 @@ int list<T>::size() { // ne rabotaet s pop'om. hz po4
 
 template <class T>
 void list<T>::reverse(){
-    // throw 0 elements
+    // throw 0 elements 
     iter iterator_head(_head);
     iter iterator_tail(_tail);
     Node * tmp_h = _head;
@@ -254,14 +254,44 @@ void list<T>::reverse(){
     }
 }
 
+template <class T>
+void list<T>::erase(iter pos) {
+    if (_size == 0) throw std::out_of_range("list is empty");
+    if (_size == 1) pop_back(); // eto ne to4no
+    else {
+        if (pos._current_node == _head) {
+            pop_front();
+        } else if (pos._current_node == _tail) {
+            pop_back();
+        } else if (pos._current_node == _end) {
+            // throw?
+        } else {
+            // iter tmp_iter(pos._current_node->_prev);
+            // std::cout << &pos << " ";
+            // std::cout << &tmp << "\n";
+            pos._current_node->_prev->_next = pos._current_node->_next;
+            pos._current_node->_next->_prev = pos._current_node->_prev;
+            // Node* tmp = pos._current_node->_prev;
+            Node* tmp = pos._current_node;
+            pos._current_node = pos._current_node->_prev;
+            delete tmp;     // LEAK IDK HOW TO FIX
+            // delete pos._current_node; //udalaet tmp nahuy
+            // --pos;
+            // pos = tmp;
+            // std::cout << &pos << " ";
+            // std::cout << &tmp << "\n\n\n";
+        }
+    }
+
+}
+
 
 template <class T>
 void list<T>::unique(){
     iter end_iter(_end);
-    iter tmp;
-    for(iter iter(_head); iter != end_iter;++iter) {
-        for(iter iter2(_head); iter2 != end_iter;++iter2) {
-            
+    for(iter iter_i(_head); iter_i != end_iter; ++iter_i) {
+        for(iter iter_j(iter_i._current_node->_next); iter_j != end_iter; ++iter_j) {
+            if (*iter_i == *iter_j) erase(iter_j);
         }
     }
 
@@ -292,13 +322,25 @@ void list<T>::PrintList() {
 // iterator ####################################################################
 
 template <class T>
-list<T>::iter::iter():_current_node(nullptr) { // esli v skobkah _head -> hueta
+list<T>::iter::iter():_current_node(nullptr) { 
 }
+
 
 template <class T>
-list<T>::iter::iter(Node* value):_current_node(value) { // esli v skobkah _head -> hueta
+list<T>::iter::iter(Node* value):_current_node(value) { 
 }
 
+
+template <class T>
+list<T>::iter::iter(const iter &value){ 
+    _current_node = value._current_node;
+}
+
+
+template <class T>
+list<T>::iter::~iter() {
+    _current_node = nullptr;
+}
 
 
 template <class T>
@@ -357,6 +399,10 @@ int main() {
     a.push_front(3);
     a.push_front(4);
     a.push_front(5);
+    a.push_front(8);
+    a.push_front(3);
+    a.PrintList();
+
     // a.push_back(0);
     // a.push_front(6);
     // list<int>b(a);
@@ -373,20 +419,32 @@ int main() {
     // a.push_front(8);
 
 
-    // list<int>::iter iterator(a._head);
+    list<int>::iter iterator(a._head);
     // list<int>::iter iterator2(a._head);
     // bool ans = iterator2==iterator;
     // bool ans2 = iterator2!=iterator;
     
     // ++iterator;
+    a.erase(iterator);
+    // std::cout << &iterator << " ";
+    ++iterator;
+    a.erase(iterator);
+    // std::cout << &iterator;
+    // ++iterator;
+    // a.erase(iterator);
+    // ++iterator;
+    // a.erase(iterator);
+
+    // ++iterator;
+    // ++iterator;
     // ++iterator;
     // std::cout << *iterator << std::endl;
     // iterator--;
-    a.pop_front();
-    a.pop_front();
-    a.pop_front();
-    a.pop_front();
-    a.pop_front();
+    // a.pop_front();
+    // a.pop_front();
+    // a.pop_front();
+    // a.pop_front();
+    // a.pop_front();
     // a.pop_front();
     
     // std::cout << a.empty()<< '\n' << a.size()  <<  std::endl;
@@ -409,6 +467,9 @@ int main() {
 
 
     a.PrintList();
+    // a.unique();
+    // a.PrintList();
+
 
     // a.reverse();
     // a.PrintList();
