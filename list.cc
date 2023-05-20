@@ -5,7 +5,7 @@ template <class T>
 list<T>::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_size(0) {}
 
 template <class T>
-list<T>::list(size_type n):list() {
+list<T>::list(size_type n):list() { // nado ukoroteet'
 // throw n < 1     throw std::out_of_range("Incorrect input");
     for(int i = 0; i < n; i++) {
         Node *tmp = new Node();
@@ -67,6 +67,14 @@ bool list <T>::empty(){
     bool ans = (_head == nullptr) ? true : false;
     return ans;
 }
+
+template <class T>
+void list<T>::swapper(iter a, iter b){
+    value_type tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
 
 template <class T>
 list<T>::~list(){ // ne rabotaet s 1 elementom
@@ -131,44 +139,21 @@ void list<T>::push_back(T value){
 
 template <class T>
 void list<T>::push_front(T value){
-
     Node *tmp = new Node(value);
     if (!_head) {
         _head = _tail = tmp;
         _end = new Node();
-
-        _head->_next = tmp;
-        tmp->_next = _tail;
         _tail->_next = _end;
-
         _end->_prev = _tail;
-        _tail->_prev = tmp;
-        tmp->_prev = _head;
     } else {
         tmp->_next = _head;
         _head->_prev = tmp;
         _head = tmp;
-
     }
     _end->_next = _head;
     _head->_prev = _end;
 
-    
-    // Node *tmp = new Node(value);
-    // if(_head == nullptr){
-    //     _head = _tail = tmp;
-    //     _end = new Node();
-    //     tmp->_next = _end;
-    //     _end->_prev = _tail;
-    // } else {
-    //     tmp->_next = _head;
-    //     _head->_prev = tmp;
-    //     _head = tmp;
-    // }
-    // _end->_next = _head;
-    // _head->_prev = _end;
     _size++;
-
 }
 
 template <class T>
@@ -329,11 +314,83 @@ void list<T>::unique(){
 
 }
 
+
+// template <class T>
+// void list<T>::kind_of_qs(list a, iterator start, iterator end) {
+//     int start_index = start.find_index(*this);
+//     int end_index = end.find_index(*this);
+//     if (start_index < end_index) {
+//         iterator pivot = partition(a,start,end);
+//         int pivot_index = pivot.find_index(*this);
+//         kind_of_qs(a, start, pivot);
+//         kind_of_qs(a, pivot, end);
+//     }
+// }
+
+// template <class T>
+// typename list<T>::iterator list<T>::partition(list a, iterator start, iterator end) {
+    
+
+    
+//     return start;
+// }
+
+
+
+// template <class T>
+// void list<T>::sort(){
+// // throw if T is not a number
+//     iterator head_iter(_head);
+//     iterator end_iter(_tail);
+
+//     kind_of_qs(*this, head_iter, end_iter);
+// }
+
+
+template <class T>
+void list<T>::kind_of_qs(int start, int end) {
+    if (start < end) {
+        int pivot_index = partition(start,end);
+        kind_of_qs(start, pivot_index - 1);
+        kind_of_qs(pivot_index + 1, end);
+    }
+}
+
+
+template <class T>
+int list<T>::partition(int start, int end) {
+    iterator pivot(_head);
+    for(int i = 0; i < end - 1; i++) {
+        ++pivot;
+    }
+    int i = start - 1;
+    for(int j = start; j <= end; j++) {
+        
+        iterator checker(_head);
+        for(int k = 0; k < i; k++) {
+            ++checker;
+        }
+
+        if (*checker < *pivot) {
+            i++;
+            ++checker;
+            // swapper(pivot,checker);
+        }
+        // std::cout << *checker << "\n";
+    }
+    PrintList();
+    return (i+1);
+}
+
+
+
 template <class T>
 void list<T>::sort(){
 // throw if T is not a number
-
-
+    iterator head_iter(_head);
+    iterator end(_tail);
+    int end_iter = end.find_index(*this);
+    kind_of_qs(0, end_iter);
 }
 
 template <class T>
@@ -385,13 +442,24 @@ T& list<T>::iter::operator*() {
 template <class T>
 void list<T>::iter::operator++() {
     _current_node = _current_node->_next;
+    // _index++;
 }
 
+template <class T>
+int list<T>::iter::find_index(list &a){ 
+    size_type res = 0;
+    while(_current_node != a._head){ 
+        _current_node = _current_node->_prev;
+        res++;
+    }
+    return res;
+}
 
 
 template <class T>
 void list<T>::iter::operator--() {
     _current_node = _current_node->_prev;
+    // _index--;
 }
 
 
@@ -426,17 +494,18 @@ int main() {
 
     // list<int> a(4);
     list<int> a;
-    a.push_front(1);
     a.push_front(2);
-    a.push_front(3);
-    a.push_front(4);
-    a.push_front(5);
-    a.push_front(1);
-    a.push_front(2);
-    a.push_front(1);
-    a.push_front(2);
+    a.push_front(7);
+    a.push_front(6);
+    a.push_front(9);
+    // a.push_front(6);
+    // a.push_front(9);
+    // a.push_front(1);
+    // a.push_front(2);
+    // a.push_front(1);
+    // a.push_front(2);
     a.PrintList();
-
+    // std::cout<<a._size<<"\n\n\n";
     // a.push_back(0);
     // a.push_front(6);
     // list<int>b(a);
@@ -452,9 +521,15 @@ int main() {
     // a.push_front(7);
     // a.push_front(8);
 
+    a.sort();
+    a.PrintList();
 
-    // list<int>::iter iterator(a._head);
-    // list<int>::iter iterator2(a._head);
+    // list<int>::iter iterator(a._tail->_prev->_prev);
+    // std::cout<<iterator.find_index(a);
+    // list<int>::iter iterator2(a._tail);
+    // // --iterator2;
+    // a.swapper(iterator,iterator2);
+    // a.PrintList();
     // bool ans = iterator2==iterator;
     // bool ans2 = iterator2!=iterator;
     
@@ -501,8 +576,8 @@ int main() {
 
 
     // a.PrintList();
-    a.unique();
-    a.PrintList();
+    // a.unique();
+    // a.PrintList();
 
 
     // a.reverse();

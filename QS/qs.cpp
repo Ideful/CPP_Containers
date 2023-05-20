@@ -16,8 +16,7 @@ int partition (int a[], int start, int end);
 
 
 /* function to implement quick sort */  
-void quick(int a[], int start, int end) /* a[] = array to be sorted, start = Starting index, end = Ending index */  
-{  
+void quick(int a[], int start, int end){ /* a[] = array to be sorted, start = Starting index, end = Ending index */  
     if (start < end) {  
         int p = partition(a, start, end);  //p is the partitioning index  
         quick(a, start, p - 1);  
@@ -25,16 +24,14 @@ void quick(int a[], int start, int end) /* a[] = array to be sorted, start = Sta
     }  
 }  
 
-int partition (int a[], int start, int end)  
-{  
+int partition (int a[], int start, int end) {  
     int pivot = a[end]; // pivot element  
     int i = (start - 1);  
     for (int j = start; j <= end - 1; j++) {  
-        // If current element is smaller than the pivot  
-        if (a[j] < pivot) {  
+        if (a[j] < pivot) {  // If current element is smaller than the pivot  
             i++; // increment index of smaller element  
             swapper(&a[i],&a[j]); //
-            printArr(a,6);
+            printArr(a,4);
             cout<<"\n";
         }  
     }  
@@ -45,9 +42,12 @@ int partition (int a[], int start, int end)
 }  
 
 
+
+
+
 int main()  
 {  
-    int a[] = { 9,6,5,2,4,8 };  
+    int a[] = { 9,6,7,2 };  
     int n = sizeof(a) / sizeof(a[0]);  
     cout<<"Before sorting array elements are - \n";  
     printArr(a, n);  
