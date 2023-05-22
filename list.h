@@ -15,11 +15,16 @@ class list {
         list(const list &l);
         list(list &&l);
         ~list();
-        void operator=(list &&l);
+        void Destructor();
+        void Par_Cons(size_type n);
+        list& operator=(list &&l);
+        list& operator=(list &l);
+        void Cpy(list l);
+        // ebanut' ravno cherez copy
 
         // List Element access
-// const_reference front()	access the first element
-// const_reference back()	access the last element
+const_reference front();	  //      access the first element
+const_reference back();	  //      access the last element
 bool empty(); //	checks whether the container is empty
 size_type size();	
 size_type max_size();	

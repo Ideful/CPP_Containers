@@ -5,21 +5,15 @@ template <class T>
 list<T>::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_size(0) {}
 
 template <class T>
-list<T>::list(size_type n):list() { // nado ukoroteet'
-// throw n < 1     throw std::out_of_range("Incorrect input");
+void list<T>::Par_Cons(size_type n){
+    //throw throw std::out_of_range("Incorrect input");
     for(int i = 0; i < n; i++) {
         Node *tmp = new Node();
         if (_head == nullptr) {
             _head = _tail = tmp;
             _end = new Node();
-
-            _head->_next = tmp;
-            tmp->_next = _tail;
             _tail->_next = _end;
-
             _end->_prev = _tail;
-            _tail->_prev = tmp;
-            tmp->_prev = _head;
         } else {
             tmp->_next = _head->_next;
             tmp->_prev = _head;
@@ -34,6 +28,12 @@ list<T>::list(size_type n):list() { // nado ukoroteet'
 }
 
 
+template <class T>
+list<T>::list(size_type n):list() { // nado ukoroteet'
+    Par_Cons(n);
+}
+
+
 
 template <class T>
 list<T>::list(const list &l) : list(l._size) {
@@ -44,24 +44,43 @@ list<T>::list(const list &l) : list(l._size) {
         ++iter;
     }
     _head = _end->_next; 
-
 }
 
 
 template <class T>
 list<T>::list(list&& l) {
-    // _head = l._head;
-    // _tail = l._tail;
-
-
-
+    _size = l._size;
+    _head = l._head;
+    _end = l._end;
+    _tail = l._tail;
+    l._head = l._tail = l._end = nullptr;
 }
+
 template <class T>
-void list<T>::operator=(list &&l)  {
-    // udalit' vse soderjimoe
-    // malloc
-    // equalizing
+void list<T>::Cpy(list l) {
+    Destructor();
+    Par_Cons(l._size);
+    Node *tmp(l._head);
+    while(_head != _end) {
+        _head->_data = tmp->_data;
+        _head = _head->_next;
+        tmp = tmp->_next;
+    }
+    _head = _end->_next;
 }
+
+template <class T>
+typename list<T>::list& list<T>::operator=(list &&l)  {
+    Cpy(l);
+    return *this;
+}
+
+template <class T>
+typename list<T>::list& list<T>::operator=(list &l)  {
+    Cpy(l);
+    return *this; 
+}
+
 
 template <class T>
 bool list <T>::empty(){
@@ -76,23 +95,26 @@ void list<T>::swapper(iter a, iter b){
     *b = tmp;
 }
 
-
 template <class T>
-list<T>::~list(){ // ne rabotaet s 1 elementom
+void list<T>::Destructor(){
     if (_head && _head != _end) {
         while(_head->_next != _end) {
             Node *tmp = _head->_next;
             delete _head;
             _head = tmp;
-            // delete tmp;
-            // _head = _head->_next;
-            // delete _head->_prev;
         }
     }
     if (_head) delete _head;
     // if (_tail) delete _tail;
     if (_end && _end != _head) delete _end;
     _head = _tail = _end = nullptr;
+}
+
+
+
+template <class T>
+list<T>::~list(){ 
+    Destructor();
 }
 
 template <class T>
@@ -107,6 +129,17 @@ typename list<T>::size_type list<T>::max_size(){
 }
 
 // ######################################################
+
+template <class T>
+typename list<T>::const_reference list<T>::front() {
+    return _head->_data;
+}
+
+template <class T>
+typename list<T>::const_reference list<T>::back() {
+    return _tail->_data;
+}
+
 
 template <class T>
 void list<T>::clear() {
@@ -500,13 +533,21 @@ int main() {
     a.push_front(6);
     a.push_front(5);
     a.push_front(4);
-    // a.push_front(10);
-    // a.push_front(-2);
+    a.push_front(10);
+    a.push_front(-2);
     // a.push_front(0);
     // a.push_back(-2);
     // a.push_back(0);
-    
-    
+    // a.Par_Cons(8);
+
+
+    // list<int> b(std::move(a));
+    list <int> b;
+    list <int> c;
+    c = std::move(a);
+    b = a;
+    b.PrintList();
+    c.PrintList();
     // a.push_front(6);
     // a.push_front(9);
     // a.push_front(1);
@@ -536,12 +577,12 @@ int main() {
 
     // list<int>::iter iterator(a._tail->_prev->_prev);
     // std::cout<<iterator.find_index(a);
-    list<int>::iter iterator2(a._head->_next);
     // list<int>::iter iterator2(a._head);
-    a.insert(iterator2,123);
+    // a.insert(iterator2,123);
+    // a.PrintList();
+    // list<int>::iter iterator2(a._head);
     // // --iterator2;
     // a.swapper(iterator,iterator2);
-    a.PrintList();
     // bool ans = iterator2==iterator;
     // bool ans2 = iterator2!=iterator;
     
@@ -617,8 +658,3 @@ int main() {
     // std::cout << a._next->_data << std::endl;
     // a.printList();
 }
-
-// template class list<int>;
-// template class list<double>;
-// template class list<float>;
-// template class list<std::string>;
