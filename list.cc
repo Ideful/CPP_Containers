@@ -34,6 +34,7 @@ list<T>::list(size_type n):list() { // nado ukoroteet'
 }
 
 
+
 template <class T>
 list<T>::list(const list &l) : list(l._size) {
     iter iter(l._head);
@@ -120,7 +121,7 @@ void list<T>::clear() {
 template <class T>
 void list<T>::push_back(T value){
 
-    Node *tmp = new Node(value);
+    Node* tmp = new Node(value);
     if(_head == nullptr){
         _head = _tail = tmp;
         _end = new Node();
@@ -139,7 +140,7 @@ void list<T>::push_back(T value){
 
 template <class T>
 void list<T>::push_front(T value){
-    Node *tmp = new Node(value);
+    Node* tmp = new Node(value);
     if (!_head) {
         _head = _tail = tmp;
         _end = new Node();
@@ -157,7 +158,7 @@ void list<T>::push_front(T value){
 }
 
 template <class T>
-void list<T>::pop_front(){ // leaks 100%
+void list<T>::pop_front(){
     if (_head == nullptr) throw std::out_of_range("nothing to pop");
     if (_size == 1) {
         delete _end;
@@ -165,7 +166,7 @@ void list<T>::pop_front(){ // leaks 100%
         _head = _tail = _end = nullptr;
     } 
     else {
-        Node * tmp = _head->_next;
+        Node* tmp = _head->_next;
         _head = tmp;
         tmp = tmp->_prev;
         delete tmp;
@@ -200,7 +201,7 @@ void list<T>::pop_back(){
 
 
 template <class T>
-int list<T>::size() { // ne rabotaet s pop'om. hz po4
+typename list<T>::size_type list<T>::size() { // ne rabotaet s pop'om. hz po4
     if(_head == nullptr) throw std::out_of_range("list is empty");
     int res = 0;
     while(_head != _end) {
@@ -246,7 +247,7 @@ void list<T>::reverse(){
     Node * tmp_t = _tail;
     T data = *iterator_head;
 
-    for(int i = 0; i < _size / 2;i++) {
+    for(int i = 0; i < _size / 2; i++) {
         tmp_h->_data = *iterator_tail;
         tmp_t->_data = data;
 
@@ -276,7 +277,7 @@ void list<T>::erase(iter pos) {
             pos._current_node->_next->_prev = pos._current_node->_prev;
             Node* tmp = pos._current_node;
             pos._current_node = pos._current_node->_prev;
-            delete tmp;     // LEAK IDK HOW TO FIX when erase, ++, erase
+            delete tmp;     
             tmp = nullptr;
             // Node* tmp = pos._current_node->_prev;
             // delete pos._current_node; //udalaet tmp nahuy
@@ -285,6 +286,32 @@ void list<T>::erase(iter pos) {
         }
     }
     _size--;
+}
+
+
+template <class T>
+typename list<T>::iter list<T>::insert(iter pos, const_reference value)
+{
+    // throw
+    iter newpos(_head);
+    if (pos._current_node == _head) {
+        push_front(value);
+    } else if (pos._current_node == _tail) {
+        push_back(value);
+        --newpos;
+    } else {
+        int index = pos.find_index(*this);
+        for (int i = 0; i < index; i++) {
+            ++newpos; // tut mb kosyaque
+        }
+        Node* newval = new Node(value);
+
+        newpos._current_node->_prev->_next = newval;
+        newval->_next = newpos._current_node;
+        newpos._current_node->_prev = newval;
+        newval->_prev = newpos._current_node->_prev;
+    }
+    return newpos;
 }
 
 
@@ -313,38 +340,6 @@ void list<T>::unique(){
     }
 
 }
-
-
-// template <class T>
-// void list<T>::kind_of_qs(list a, iterator start, iterator end) {
-//     int start_index = start.find_index(*this);
-//     int end_index = end.find_index(*this);
-//     if (start_index < end_index) {
-//         iterator pivot = partition(a,start,end);
-//         int pivot_index = pivot.find_index(*this);
-//         kind_of_qs(a, start, pivot);
-//         kind_of_qs(a, pivot, end);
-//     }
-// }
-
-// template <class T>
-// typename list<T>::iterator list<T>::partition(list a, iterator start, iterator end) {
-    
-
-    
-//     return start;
-// }
-
-
-
-// template <class T>
-// void list<T>::sort(){
-// // throw if T is not a number
-//     iterator head_iter(_head);
-//     iterator end_iter(_tail);
-
-//     kind_of_qs(*this, head_iter, end_iter);
-// }
 
 
 template <class T>
@@ -390,8 +385,6 @@ int list<T>::partition(int start, int end) {
     swapper(ichecker,pivot);
     return (i);
 }
-
-
 
 template <class T>
 void list<T>::sort(){
@@ -503,15 +496,15 @@ int main() {
 
     // list<int> a(4);
     list<int> a;
-    a.push_front(2);
     a.push_front(7);
     a.push_front(6);
-    a.push_front(9);
-    a.push_front(10);
-    a.push_front(-2);
-    a.push_front(0);
-    a.push_back(-2);
-    a.push_back(0);
+    a.push_front(5);
+    a.push_front(4);
+    // a.push_front(10);
+    // a.push_front(-2);
+    // a.push_front(0);
+    // a.push_back(-2);
+    // a.push_back(0);
     
     
     // a.push_front(6);
@@ -537,15 +530,18 @@ int main() {
     // a.push_front(7);
     // a.push_front(8);
 
-    a.sort();
-    a.PrintList();
+    // a.sort();
+
+    // a.PrintList();
 
     // list<int>::iter iterator(a._tail->_prev->_prev);
     // std::cout<<iterator.find_index(a);
-    // list<int>::iter iterator2(a._tail);
+    list<int>::iter iterator2(a._head->_next);
+    // list<int>::iter iterator2(a._head);
+    a.insert(iterator2,123);
     // // --iterator2;
     // a.swapper(iterator,iterator2);
-    // a.PrintList();
+    a.PrintList();
     // bool ans = iterator2==iterator;
     // bool ans2 = iterator2!=iterator;
     

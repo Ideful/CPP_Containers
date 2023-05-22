@@ -6,12 +6,10 @@ template <class T>
 
 class list {
     public:
-
         using value_type = T;
         using reference = T &;
         using const_reference = const T &;
         using size_type = size_t;
-
         list();
         list(size_type n); /* size_type n */
         list(const list &l);
@@ -19,30 +17,17 @@ class list {
         ~list();
         void operator=(list &&l);
 
-
-
-
         // List Element access
 // const_reference front()	access the first element
 // const_reference back()	access the last element
-
-        // List Iterators
-// iterator begin()	returns an iterator to the beginning
-// iterator end()	returns an iterator to the end
-
-        // List Capacity
 bool empty(); //	checks whether the container is empty
-
-// size_type size()	returns the number of elements
-int size();
-
+size_type size();	
 size_type max_size();	
 
         // List Modifiers
 void clear(); //	clears the contents
-// insert(iterator pos, const_reference value)	inserts elements into concrete pos and returns the iterator that points to the new element
 void push_front(T value); //	adds an element to the end
-void push_back(T value); //	adds an element to the head
+void push_back(T value); //	adds an elements to the head
 void pop_front(); //	removes the first element
 void pop_back(); //	removes the last element
 // void swap(list& other);  //	swaps the contents
@@ -52,8 +37,6 @@ void reverse(); //	reverses the order of the elements
 void unique(); //	removes consecutive duplicate elements
 void sort(); //	sorts the elements
 void PrintList();
-
-
         // fields:
         struct Node{
                 T _data;
@@ -79,6 +62,7 @@ void PrintList();
                         iter();
                         iter(Node* value);
                         iter(const iter &value);
+
                         ~iter();
                         Node* _current_node = nullptr;
                         T& operator*();
@@ -94,12 +78,9 @@ void PrintList();
         using const_iterator = iter;
         public:
         void erase(iter pos);	//erases element at pos
-        
-        
-        // void kind_of_qs(list a, iterator head, iterator tail);
-        // iterator partition(list a, iterator start, iterator end);
         void kind_of_qs(int head_iter, int tail_iter);
         int partition(int start, int end);
+        iter insert(iter pos, const_reference value); //	inserts elements into concrete pos and returns the iterator that points to the new element
 
         iter Begin();
         iter End();  
