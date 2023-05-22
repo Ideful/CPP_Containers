@@ -28,16 +28,18 @@ int partition (int a[], int start, int end) {
     int pivot = a[end]; // pivot element  
     int i = (start - 1);  
     for (int j = start; j <= end - 1; j++) {  
+
+        
         if (a[j] < pivot) {  // If current element is smaller than the pivot  
             i++; // increment index of smaller element  
             swapper(&a[i],&a[j]); //
-            printArr(a,4);
+            printArr(a,7);
             cout<<"\n";
         }  
     }  
     swapper(&a[i+1],&a[end]);
-    printArr(a,6);
-    cout<<"\n\n\n";
+    // printArr(a,6);
+    // cout<<"\n\n\n";
     return (i + 1);  
 }  
 
@@ -47,7 +49,7 @@ int partition (int a[], int start, int end) {
 
 int main()  
 {  
-    int a[] = { 9,6,7,2 };  
+    int a[] = {0,-2,10, 9,6,7,2 };  
     int n = sizeof(a) / sizeof(a[0]);  
     cout<<"Before sorting array elements are - \n";  
     printArr(a, n);  

@@ -360,26 +360,35 @@ void list<T>::kind_of_qs(int start, int end) {
 template <class T>
 int list<T>::partition(int start, int end) {
     iterator pivot(_head);
-    for(int i = 0; i < end - 1; i++) {
+    for(int i = 0; i < end; i++) {
         ++pivot;
     }
-    int i = start - 1;
-    for(int j = start; j <= end; j++) {
+        //  pivot = pivot
+
+    int i = start - 1; // vse ok
+    for(int j = start; j <= end - 1; j++) { // mb ne nujen -1
         
-        iterator checker(_head);
-        for(int k = 0; k < i; k++) {
-            ++checker;
+        iterator jchecker(_head);
+        for(int k = 0; k < j; k++) {
+            ++jchecker;
         }
 
-        if (*checker < *pivot) {
+        if (*jchecker < *pivot) {
             i++;
-            ++checker;
-            // swapper(pivot,checker);
+            iterator ichecker(_head);
+            for(int z = 0; z < i; z++) {
+                ++ichecker;
+            }            
+            swapper(ichecker,jchecker);
         }
-        // std::cout << *checker << "\n";
     }
-    PrintList();
-    return (i+1);
+    i++;
+    iterator ichecker(_head);
+    for(int k = 0; k < i; k++) {
+        ++ichecker;
+    }
+    swapper(ichecker,pivot);
+    return (i);
 }
 
 
@@ -498,6 +507,13 @@ int main() {
     a.push_front(7);
     a.push_front(6);
     a.push_front(9);
+    a.push_front(10);
+    a.push_front(-2);
+    a.push_front(0);
+    a.push_back(-2);
+    a.push_back(0);
+    
+    
     // a.push_front(6);
     // a.push_front(9);
     // a.push_front(1);
