@@ -34,7 +34,7 @@ void push_back(T value); //	adds an elements to the head
 void pop_front(); //	removes the first element
 void pop_back(); //	removes the last element
 void swap(list& other);  //	swaps the contents
-// void merge(list& other); //	merges two sorted lists
+void merge(list& other); //	merges two sorted lists
 void reverse(); //	reverses the order of the elements
 void unique(); //	removes consecutive duplicate elements
 void sort(); //	sorts the elements

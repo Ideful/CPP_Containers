@@ -269,14 +269,26 @@ void list<T>::swap(list& other){
 }
 
 
-// void list::merge(list& other){
+template <class T>
+void list<T>::merge(list& other){
 
-
-
-// }
+}
 
 template <class T>
 void list<T>::splice(typename list<T>::const_iterator pos, list& other) {
+    int cnt = 0;
+    iter tmp = pos;
+    while(pos._current_node != other._end) {
+        cnt++;
+        ++pos;
+    }
+    iter qwe(_tail->_next);
+    Par_Cons(cnt);
+    for(int i = 0; i < cnt; i++) {
+        *qwe = *tmp;
+        ++qwe;
+        ++tmp;
+    }
 
 }
 
@@ -540,7 +552,7 @@ int main() {
 
     // list<int> a(4);
     list<int> a;
-    a.push_front(7);
+    a.push_front(0);
     a.push_front(6);
     a.push_front(5);
     a.push_front(4);
@@ -575,19 +587,19 @@ int main() {
     // std::cout << b.max_size();
     // std::cout << ans << std::endl;
     // std::cout << ans2 << std::endl;
-    b.push_front(223);
+    b.push_front(1);
+    b.push_front(2);
+    b.push_front(3);
     b.push_front(4);
     b.push_front(5);
     b.push_front(6);
-    b.push_front(7);
-    b.push_front(8);
+    list<int>::iter it(b._head);
+    a.splice(it,b);
 
-
-    b.PrintList();
-
-    a.swap(b);
+    // b.PrintList();
+    // a.swap(b);
     a.PrintList();
-    b.PrintList();
+    // b.PrintList();
 
     // a.PrintList();
 
