@@ -276,6 +276,13 @@ void list<T>::swap(list& other){
 // }
 
 template <class T>
+void list<T>::splice(typename list<T>::const_iterator pos, list& other) {
+
+}
+
+
+
+template <class T>
 void list<T>::reverse(){
     // throw 0 elements 
     iter iterator_head(_head);
@@ -574,9 +581,11 @@ int main() {
     b.push_front(6);
     b.push_front(7);
     b.push_front(8);
-    b.PrintList();
-    a.swap(b);
 
+
+    b.PrintList();
+
+    a.swap(b);
     a.PrintList();
     b.PrintList();
 

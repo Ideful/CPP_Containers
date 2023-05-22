@@ -35,7 +35,6 @@ void pop_front(); //	removes the first element
 void pop_back(); //	removes the last element
 void swap(list& other);  //	swaps the contents
 // void merge(list& other); //	merges two sorted lists
-// void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
 void reverse(); //	reverses the order of the elements
 void unique(); //	removes consecutive duplicate elements
 void sort(); //	sorts the elements
@@ -78,7 +77,7 @@ void PrintList();
         void kind_of_qs(int head_iter, int tail_iter);
         int partition(int start, int end);
         iter insert(iter pos, const_reference value); //	inserts elements into concrete pos and returns the iterator that points to the new element
-
+        void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
         iter Begin();
         iter End();  
         void swapper(iter a, iter b);
