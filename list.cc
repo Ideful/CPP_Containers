@@ -258,11 +258,15 @@ typename list<T>::iter  list<T>::End() {
     return _end;
 }
 
-// void list::swap(list& other){
-
-
-
-// }
+template <class T>
+void list<T>::swap(list& other){
+    list tmp;
+    tmp.Cpy(other);
+    other.Destructor();
+    other.Cpy(*this);
+    Destructor();
+    Cpy(tmp);
+}
 
 
 // void list::merge(list& other){
@@ -543,11 +547,11 @@ int main() {
 
     // list<int> b(std::move(a));
     list <int> b;
-    list <int> c;
-    c = std::move(a);
-    b = a;
-    b.PrintList();
-    c.PrintList();
+    // list <int> c;
+    // c = std::move(a);
+    // b = a;
+    
+    // c.PrintList();
     // a.push_front(6);
     // a.push_front(9);
     // a.push_front(1);
@@ -564,14 +568,17 @@ int main() {
     // std::cout << b.max_size();
     // std::cout << ans << std::endl;
     // std::cout << ans2 << std::endl;
-    // a.push_front(223);
-    // a.push_front(4);
-    // a.push_front(5);
-    // a.push_front(6);
-    // a.push_front(7);
-    // a.push_front(8);
+    b.push_front(223);
+    b.push_front(4);
+    b.push_front(5);
+    b.push_front(6);
+    b.push_front(7);
+    b.push_front(8);
+    b.PrintList();
+    a.swap(b);
 
-    // a.sort();
+    a.PrintList();
+    b.PrintList();
 
     // a.PrintList();
 

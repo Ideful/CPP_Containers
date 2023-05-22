@@ -20,14 +20,12 @@ class list {
         list& operator=(list &&l);
         list& operator=(list &l);
         void Cpy(list l);
-        // ebanut' ravno cherez copy
 
-        // List Element access
-const_reference front();	  //      access the first element
-const_reference back();	  //      access the last element
-bool empty(); //	checks whether the container is empty
-size_type size();	
-size_type max_size();	
+        const_reference front();	  //      access the first element
+        const_reference back();	  //      access the last element
+        bool empty(); //	checks whether the container is empty
+        size_type size();	
+        size_type max_size();	
 
         // List Modifiers
 void clear(); //	clears the contents
@@ -35,9 +33,9 @@ void push_front(T value); //	adds an element to the end
 void push_back(T value); //	adds an elements to the head
 void pop_front(); //	removes the first element
 void pop_back(); //	removes the last element
-// void swap(list& other);  //	swaps the contents
+void swap(list& other);  //	swaps the contents
 // void merge(list& other); //	merges two sorted lists
-// // void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
+// void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
 void reverse(); //	reverses the order of the elements
 void unique(); //	removes consecutive duplicate elements
 void sort(); //	sorts the elements
@@ -49,12 +47,6 @@ void PrintList();
                 Node *_next;
                 Node() : _data(), _prev(nullptr), _next(nullptr){};
                 Node(T value) : _data(value), _prev(nullptr), _next(nullptr){};
-                // ~Node() {
-                //         while(_head->_next != _end) {
-                //                 delete _head->_data;
-                //                 delete _head->_prev;
-                //         }
-                // };
         };
         Node* _head;
         Node* _tail;
