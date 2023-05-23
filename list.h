@@ -12,33 +12,34 @@ class list {
         using size_type = size_t;
         list();
         list(size_type n); /* size_type n */
+        list(std::initializer_list<value_type> const &items); // cho za items
         list(const list &l);
         list(list &&l);
         ~list();
-        void Destructor();
-        void Par_Cons(size_type n);
         list& operator=(list &&l);
         list& operator=(list &l);
+
+        void Destructor();
+        void ParCons(size_type n);
         void Cpy(list l);
 
-        const_reference front();	  //      access the first element
-        const_reference back();	  //      access the last element
-        bool empty(); //	checks whether the container is empty
-        size_type size();	
-        size_type max_size();	
-
-        // List Modifiers
-void clear(); //	clears the contents
-void push_front(T value); //	adds an element to the end
-void push_back(T value); //	adds an elements to the head
-void pop_front(); //	removes the first element
-void pop_back(); //	removes the last element
-void swap(list& other);  //	swaps the contents
-void merge(list& other); //	merges two sorted lists
-void reverse(); //	reverses the order of the elements
-void unique(); //	removes consecutive duplicate elements
-void sort(); //	sorts the elements
-void PrintList();
+        const_reference Front();	  //      access the first element
+        const_reference Back();	  //      access the last element
+        bool Empty(); //	checks whether the container is empty
+        size_type Size();	// returns size
+        size_type MaxSize();	// check node qty
+        void Clear(); //	clears the contents
+        void PushFront(T value); //	adds an element to the end
+        void PushBack(T value); //	adds an elements to the head
+        void PopFront(); //	removes the first element
+        void PopBack(); //	removes the last element
+        void Swap(list& other);  //	swaps the contents
+        void Merge(list& other); //	merges two sorted lists
+        void Reverse(); //	reverses the order of the elements
+        void Unique(); //	removes consecutive duplicate elements
+        void Sort(); //	sorts the elements
+        void PrintList();
+        
         // fields:
         struct Node{
                 T _data;
@@ -52,13 +53,11 @@ void PrintList();
         Node* _end;
         int _size;
 
-
         class ListIterator {
                 public:
                         ListIterator();
                         ListIterator(Node* value);
                         ListIterator(const ListIterator &value);
-
                         ~ListIterator();
                         Node* _current_node = nullptr;
                         T& operator*();
@@ -68,49 +67,27 @@ void PrintList();
                         bool operator!=(ListIterator &value);
                         int find_index(list &a);
                         int _index = 0;
-
         };
         using iterator = ListIterator;
+
+        class ListConstIterator:ListIterator{
+                public:
+
+        };
         using const_iterator = ListIterator;
+
+
         public:
-        void erase(ListIterator pos);	//erases element at pos
+        void Erase(iterator pos);	//erases element at pos
         void kind_of_qs(int head_iter, int tail_iter);
-        int partition(int start, int end);
-        ListIterator insert(ListIterator pos, const_reference value); //	inserts elements into concrete pos and returns the iterator that points to the new element
-        void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
-        ListIterator Begin();
-        ListIterator End();  
-        void swapper(ListIterator a, ListIterator b);
+        int Partition(int start, int end);
+        void Splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
+        void Swapper(iterator a, iterator b);
+        iterator Begin();
+        iterator End();  
+        iterator Insert(iterator pos, const_reference value); //	inserts elements into concrete pos and returns the iterator that points to the new element
 };
-
-
-// Каждый вид контейнеров должен предоставить пользователю следующие методы:
-// -    стандартные конструкторы (конструктор по умолчанию, конструктор копирования, конструктор перемещения, 
-//      конструктор со списком инициализации, см. материалы);
-// -    методы доступа к элементам контейнера (например, осуществление доступа к элементу с индексом i);
-// -    методы проверки наполненности контейнера (например, количество элементов в контейнере, проверка на пустоту контейнера);
-// -    методы изменения контейнера (удаление и добавление новых элементов, очистка контейнера);
-// -    методы для работы с итератором контейнера.
-
-//-  Контейнеры предоставляют через методы `begin()` и `end()` итераторы, 
-//   которые указывают на первый и следующий после последнего элементы контейнера соответственно.
-
-//   Над итератором `iter` определены следующие операции:
-
-//   - `*iter`: получение элемента, на который указывает итератор;
-//   - `++iter`: перемещение итератора вперед для обращения к следующему элементу;
-//   - `--iter`: перемещение итератора назад для обращения к предыдущему элементу;
-//   - `iter1 == iter2`: два итератора равны, если они указывают на один и тот же элемент;
-//   - `iter1 != iter2`: два итератора не равны, если они указывают на разные элементы.
-
-
-//   В объекте класса контейнера хранятся указатели на "голову" и "хвост" списка, 
-//   указывающие на первый и последний элементы списка. 
-//   Контейнер List предоставляет прямой доступ только к "голове" и "хвосту", 
-//   но позволяет добавлять и удалять элементы в любой части списка.
-
-
- #endif //  SRC_LIST_H_
+#endif //  SRC_LIST_H_
 
 // include tpp i ubrat iz tpp header
 
