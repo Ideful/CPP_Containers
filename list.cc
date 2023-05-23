@@ -12,17 +12,26 @@ void list<T>::Par_Cons(size_type n){
         if (_head == nullptr) {
             _head = _tail = tmp;
             _end = new Node();
-            _tail->_next = _end;
-            _end->_prev = _tail;
+            // _tail->_next = _end;
+            // _end->_prev = _tail;
+            tmp->_prev = _end;
+            _end->_next = _head;
         } else {
-            tmp->_next = _head->_next;
-            tmp->_prev = _head;
+            // tmp->_next = _head->_next;
+            // tmp->_prev = _head;
 
-            _head->_next->_prev = tmp;
-            _head->_next = tmp;
+            // _head->_next->_prev = tmp;
+            // _head->_next = tmp;
+
+
+            tmp->_prev = _tail;
+            _tail->_next = tmp;
+            _tail = tmp;
         }
-        _end->_next = _head;
-        _head->_prev = _end;
+        _end->_prev = _tail;
+        _tail->_next = _end;
+        // _end->_next = _head;
+        // _head->_prev = _end;
         _size++;
     }
 }
@@ -271,7 +280,9 @@ void list<T>::swap(list& other){
 
 template <class T>
 void list<T>::merge(list& other){
-
+    iter pos = other._head;
+    splice(pos,other);
+    sort();
 }
 
 template <class T>
@@ -282,11 +293,11 @@ void list<T>::splice(typename list<T>::const_iterator pos, list& other) {
         cnt++;
         ++pos;
     }
-    iter qwe(_tail->_next);
+    iter qwe(_tail);
     Par_Cons(cnt);
     for(int i = 0; i < cnt; i++) {
-        *qwe = *tmp;
         ++qwe;
+        *qwe = *tmp;
         ++tmp;
     }
 
@@ -552,12 +563,12 @@ int main() {
 
     // list<int> a(4);
     list<int> a;
-    a.push_front(0);
-    a.push_front(6);
-    a.push_front(5);
-    a.push_front(4);
+    a.push_front(7);
+    a.push_front(8);
+    a.push_front(9);
     a.push_front(10);
-    a.push_front(-2);
+    a.push_front(11);
+    a.push_front(12);
     // a.push_front(0);
     // a.push_back(-2);
     // a.push_back(0);
@@ -593,10 +604,13 @@ int main() {
     b.push_front(4);
     b.push_front(5);
     b.push_front(6);
-    list<int>::iter it(b._head);
-    a.splice(it,b);
+    
+    
+    b.PrintList();
 
-    // b.PrintList();
+    // list<int>::iter it(b._head->_next);
+    a.merge(b);
+
     // a.swap(b);
     a.PrintList();
     // b.PrintList();
