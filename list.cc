@@ -120,7 +120,6 @@ void list<T>::Destructor(){
 }
 
 
-
 template <class T>
 list<T>::~list(){ 
     Destructor();
@@ -128,13 +127,7 @@ list<T>::~list(){
 
 template <class T>
 typename list<T>::size_type list<T>::MaxSize(){
-    size_type counter = 0;
-    Node * tmp(_head);
-    while(tmp != _end) {
-        tmp = tmp->_next;
-        counter++;
-    }
-    return counter;
+    return std::numeric_limits<std::size_t>::max() / sizeof(T);
 }
 
 // ######################################################
@@ -155,7 +148,7 @@ typename list<T>::const_reference list<T>::Back() {
 template <class T>
 void list<T>::Clear() {
     while(_head != _end) {
-    Node *tmp = _head->_next;
+        Node *tmp = _head->_next;
         delete _head; // a esli eto ne chislo???
         _head = tmp;
     }
@@ -165,8 +158,7 @@ void list<T>::Clear() {
 
 
 template <class T>
-void list<T>::PushBack(T value){
-
+void list<T>::PushBack(typename list<T>::value_type value){
     Node* tmp = new Node(value);
     if(_head == nullptr){
         _head = _tail = tmp;
@@ -186,7 +178,7 @@ void list<T>::PushBack(T value){
 
 
 template <class T>
-void list<T>::PushFront(T value){
+void list<T>::PushFront(typename list<T>::value_type value){
     Node* newnode = new Node(value);
     if (!_head) {
         _head = _tail = newnode;
@@ -284,13 +276,33 @@ void list<T>::Swap(list& other){
 
 template <class T>
 void list<T>::Merge(list& other){
-    ListIterator pos = other._head;
-    Splice(pos,other);
-    Sort();
+    // iterator thisiter = Begin();
+    // iterator iter = other.Begin();
+    // if (!_head) {
+    //     for (; iter != other.End(); ++iter) {
+    //         PushBack(*iter);
+    //     }
+    // } else {
+    //     for (; iter != other.End() && thisiter != End();) {
+    //         if (*iter <= *thisiter) {
+    //             Insert(iter, *iter);
+    //             ++iter;
+    //         } 
+    //         else if (*iter > *thisiter && thisiter != End()) ++iter;
+    //         if (thisiter == End()) PushBack(*iter);
+    //     }
+    // }
+    // other.Clear();
 }
 
 template <class T>
 void list<T>::Splice(typename list<T>::const_iterator pos, list& other) {
+    int other_size = 0;
+
+    // for(iterator checker(other._head); checker != other._end || checker; ++checker) {
+    //     if (checker == other._end) throw std::out_of_range("wrong list iterator");
+    // }
+
     int cnt = 0;
     ListIterator tmp = pos;
     while(pos._current_node != other._end) {
@@ -310,30 +322,30 @@ void list<T>::Splice(typename list<T>::const_iterator pos, list& other) {
 
 template <class T>
 void list<T>::Reverse(){
-    // throw 0 elements 
-    ListIterator iterator_head(_head);
-    ListIterator iterator_tail(_tail);
-    Node * tmp_h = _head;
-    Node * tmp_t = _tail;
-    T data = *iterator_head;
+    if (_size > 1) {
+        ListIterator iterator_head(_head);
+        ListIterator iterator_tail(_tail);
+        Node * tmp_h = _head;
+        Node * tmp_t = _tail;
+        T data = *iterator_head;
 
-    for(int i = 0; i < _size / 2; i++) {
-        tmp_h->_data = *iterator_tail;
-        tmp_t->_data = data;
+        for(int i = 0; i < _size / 2; i++) {
+            tmp_h->_data = *iterator_tail;
+            tmp_t->_data = data;
 
-        tmp_h = tmp_h->_next;
-        tmp_t = tmp_t->_prev;
+            tmp_h = tmp_h->_next;
+            tmp_t = tmp_t->_prev;
 
-        data = tmp_h->_data;
-        ++iterator_head;
-        --iterator_tail;
+            data = tmp_h->_data;
+            ++iterator_head;
+            --iterator_tail;
+        }
     }
 }
 
 
 template <class T>
 void list<T>::Erase(typename list<T>::iterator pos) {
-    if (_size == 0) throw std::out_of_range("list is empty");
     if (_size == 1) PopBack(); // eto ne to4no
     else {
         if (pos._current_node == _head) {
@@ -341,7 +353,7 @@ void list<T>::Erase(typename list<T>::iterator pos) {
         } else if (pos._current_node == _tail) {
             PopBack();
         } else if (pos._current_node == _end) {
-            // throw?
+            throw std::out_of_range("pls don't");
         } else {
             pos._current_node->_prev->_next = pos._current_node->_next;
             pos._current_node->_next->_prev = pos._current_node->_prev;
@@ -412,7 +424,7 @@ int list<T>::Partition(int start, int end) {
     for(int i = 0; i < end; i++) {
         ++pivot;
     }
-    int i = start - 1; // vse ok
+    int i = start - 1;
     for(int j = start; j <= end - 1; j++) { // mb ne nujen -1
         iterator jchecker(_head);
         for(int k = 0; k < j; k++) {
@@ -612,16 +624,16 @@ int main() {
 
 
     a.PrintList();
-    list<int>::iterator qwe(a._head->_next);
-    *qwe = 12321421;
-    std::cout<<"\n\n\n"<<a._head->_next->_data<<std::endl;
-
-    list<int>::const_iterator qwew(a._head->_next);
-    // *qwew = 98;
+    // list<int>::iterator qwe(a._head->_next);
+    // *qwe = 12321421;
     // std::cout<<"\n\n\n"<<a._head->_next->_data<<std::endl;
-    ++qwew;
-    ++qwew;
-    std::cout<<"\n\n\n"<<*qwew<<std::endl;
+
+    // list<int>::const_iterator qwew(a._head->_next);
+    // // *qwew = 98;
+    // // std::cout<<"\n\n\n"<<a._head->_next->_data<<std::endl;
+    // ++qwew;
+    // ++qwew;
+    // std::cout<<"\n\n\n"<<a.MaxSize()<<std::endl;
     // qwe = a.Insert(qwe,22);
     // a.Sort();
     // a.PushFront(7);
@@ -634,7 +646,9 @@ int main() {
     // a.push_back(-2);
     // a.push_back(0);
     // a.ParCons(8);
-
+    list<int>b;
+    b = a;
+    a.Merge(b);
     // a.erase(qwe);
 
     // list<int> b(std::move(a));
