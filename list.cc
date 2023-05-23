@@ -160,6 +160,7 @@ void list<T>::Clear() {
         _head = tmp;
     }
     if (_end) delete _end;
+    _size = 0;
 }
 
 
@@ -552,19 +553,43 @@ void list<T>::ListConstIterator::operator++() {
 }
 
 
+// template <class T>
+// bool list<T>::ListConstIterator::operator==(ListConstIterator &value) {
+//     return (_current_node == value._current_node) ? true : false;
+// }
+
+
+// template <class T>
+// bool list<T>::ListConstIterator::operator!=(ListConstIterator &value) {
+//     return !(operator==(value));
+// }
+
+
+// bonus          ##############################################################
+
+
 template <class T>
-bool list<T>::ListConstIterator::operator==(ListConstIterator &value) {
-    return (_current_node == value._current_node) ? true : false;
+template <typename... Args>
+void list<T>::EmplaceFront(Args &&...args) {
+    ([&] { PushFront(args); }(), ...);
 }
 
 
 template <class T>
-bool list<T>::ListConstIterator::operator!=(ListConstIterator &value) {
-    return !(operator==(value));
+template <typename... Args>
+void list<T>::EmplaceBack(Args &&...args) {
+    ([&] { PushBack(args); }(), ...);
 }
 
 
-
+template <class T>
+template <typename... Args>
+typename list<T>::iterator list<T>::Emplace(const_iterator pos, Args &&...args) {
+    iterator iter = pos;    
+    ([&] { Insert(pos, args); }(), ...);
+    --iter;
+    return iter;
+}
 
 
 int main() {
@@ -593,7 +618,10 @@ int main() {
 
     list<int>::const_iterator qwew(a._head->_next);
     // *qwew = 98;
-    std::cout<<"\n\n\n"<<a._head->_next->_data<<std::endl;
+    // std::cout<<"\n\n\n"<<a._head->_next->_data<<std::endl;
+    ++qwew;
+    ++qwew;
+    std::cout<<"\n\n\n"<<*qwew<<std::endl;
     // qwe = a.Insert(qwe,22);
     // a.Sort();
     // a.PushFront(7);

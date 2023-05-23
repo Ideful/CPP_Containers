@@ -3,7 +3,7 @@ gccc = g++ -Wall -Werror -Wextra
 all: exec
 
 exec:
-	g++ -g *.cc -o test_exec
+	g++ -std=c++17 -g *.cc -o test_exec
 	./test_exec
 
 leaks:

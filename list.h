@@ -2,6 +2,7 @@
 #define SRC_LIST_H_
 #include <iostream>
 
+
 template <class T>
 
 class list {
@@ -80,10 +81,8 @@ class list {
                         const_reference operator*();
                         void operator++();
                         void operator--();
-                        bool operator==(ListConstIterator &value);
-                        bool operator!=(ListConstIterator &value);
-                        // int FindIndex(list &a);      // ??? a nado li eto
-                        
+                        // bool operator==(ListConstIterator &value);
+                        // bool operator!=(ListConstIterator &value);                      
                         Node* _current_node = nullptr;  
                         // int _index();        // ??? a nado li eto
         };
@@ -98,6 +97,13 @@ class list {
         iterator Begin();
         iterator End();  
         iterator Insert(iterator pos, const_reference value); //	inserts elements into concrete pos and returns the iterator that points to the new element
+
+        template <typename... Args>
+        iterator Emplace(const_iterator pos, Args&&... args);
+        template <typename... Args>
+        void EmplaceFront(Args&&... args);
+        template <typename... Args>
+        void EmplaceBack(Args&&... args);
 };
 #endif //  SRC_LIST_H_
 
