@@ -46,11 +46,11 @@ list<T>::list(size_type n):list() { // nado ukoroteet'
 
 template <class T>
 list<T>::list(const list &l) : list(l._size) {
-    iter iter(l._head);
+    ListIterator ListIterator(l._head);
     while(_head != _end) {
-        _head->_data = *iter;
+        _head->_data = *ListIterator;
         _head = _head->_next;
-        ++iter;
+        ++ListIterator;
     }
     _head = _end->_next; 
 }
@@ -98,7 +98,7 @@ bool list <T>::empty(){
 }
 
 template <class T>
-void list<T>::swapper(iter a, iter b){
+void list<T>::swapper(ListIterator a, ListIterator b){
     value_type tmp = *a;
     *a = *b;
     *b = tmp;
@@ -257,13 +257,13 @@ typename list<T>::size_type list<T>::size() { // ne rabotaet s pop'om. hz po4
 
 
 template <class T>
-typename list<T>::iter list<T>::Begin() {
+typename list<T>::ListIterator list<T>::Begin() {
     return _head;
 }
 
 
 template <class T>
-typename list<T>::iter  list<T>::End() {
+typename list<T>::ListIterator  list<T>::End() {
     return _end;
 }
 
@@ -280,7 +280,7 @@ void list<T>::swap(list& other){
 
 template <class T>
 void list<T>::merge(list& other){
-    iter pos = other._head;
+    ListIterator pos = other._head;
     splice(pos,other);
     sort();
 }
@@ -288,12 +288,12 @@ void list<T>::merge(list& other){
 template <class T>
 void list<T>::splice(typename list<T>::const_iterator pos, list& other) {
     int cnt = 0;
-    iter tmp = pos;
+    ListIterator tmp = pos;
     while(pos._current_node != other._end) {
         cnt++;
         ++pos;
     }
-    iter qwe(_tail);
+    ListIterator qwe(_tail);
     Par_Cons(cnt);
     for(int i = 0; i < cnt; i++) {
         ++qwe;
@@ -308,8 +308,8 @@ void list<T>::splice(typename list<T>::const_iterator pos, list& other) {
 template <class T>
 void list<T>::reverse(){
     // throw 0 elements 
-    iter iterator_head(_head);
-    iter iterator_tail(_tail);
+    ListIterator iterator_head(_head);
+    ListIterator iterator_tail(_tail);
     Node * tmp_h = _head;
     Node * tmp_t = _tail;
     T data = *iterator_head;
@@ -328,7 +328,7 @@ void list<T>::reverse(){
 }
 
 template <class T>
-void list<T>::erase(iter pos) {
+void list<T>::erase(ListIterator pos) {
     if (_size == 0) throw std::out_of_range("list is empty");
     if (_size == 1) pop_back(); // eto ne to4no
     else {
@@ -339,7 +339,7 @@ void list<T>::erase(iter pos) {
         } else if (pos._current_node == _end) {
             // throw?
         } else {
-            // iter tmp_iter(pos._current_node->_prev);
+            // ListIterator tmp_iter(pos._current_node->_prev);
             pos._current_node->_prev->_next = pos._current_node->_next;
             pos._current_node->_next->_prev = pos._current_node->_prev;
             Node* tmp = pos._current_node;
@@ -357,10 +357,10 @@ void list<T>::erase(iter pos) {
 
 
 template <class T>
-typename list<T>::iter list<T>::insert(iter pos, const_reference value)
+typename list<T>::ListIterator list<T>::insert(ListIterator pos, const_reference value)
 {
     // throw
-    iter newpos(_head);
+    ListIterator newpos(_head);
     if (pos._current_node == _head) {
         push_front(value);
     } else if (pos._current_node == _tail) {
@@ -384,11 +384,11 @@ typename list<T>::iter list<T>::insert(iter pos, const_reference value)
 
 template <class T>
 void list<T>::unique(){
-    iter end_iter(_end);
+    ListIterator end_iter(_end);
     // int c1 = 0;
-    for(iter iter_i(_head); iter_i != end_iter; ++iter_i) {
+    for(ListIterator iter_i(_head); iter_i != end_iter; ++iter_i) {
         // int c2 = 0;
-        for(iter iter_j(iter_i._current_node->_next); iter_j != end_iter; ++iter_j) {
+        for(ListIterator iter_j(iter_i._current_node->_next); iter_j != end_iter; ++iter_j) {
             if (*iter_i == *iter_j){ 
                 erase(iter_j);
                 // c1--;
@@ -480,42 +480,42 @@ void list<T>::PrintList() {
 // iterator ####################################################################
 
 template <class T>
-list<T>::iter::iter():_current_node(nullptr) { 
+list<T>::ListIterator::ListIterator():_current_node(nullptr) { 
 }
 
 
 template <class T>
-list<T>::iter::iter(Node* value):_current_node(value) { 
+list<T>::ListIterator::ListIterator(Node* value):_current_node(value) { 
 }
 
 
 template <class T>
-list<T>::iter::iter(const iter &value){ 
+list<T>::ListIterator::ListIterator(const ListIterator &value){ 
     _current_node = value._current_node;
 }
 
 
 template <class T>
-list<T>::iter::~iter() {
+list<T>::ListIterator::~ListIterator() {
     _current_node = nullptr;
 }
 
 
 template <class T>
-T& list<T>::iter::operator*() {
+T& list<T>::ListIterator::operator*() {
     return _current_node->_data;
 }
 
 
 
 template <class T>
-void list<T>::iter::operator++() {
+void list<T>::ListIterator::operator++() {
     _current_node = _current_node->_next;
     // _index++;
 }
 
 template <class T>
-int list<T>::iter::find_index(list &a){ 
+int list<T>::ListIterator::find_index(list &a){ 
     size_type res = 0;
     while(_current_node != a._head){ 
         _current_node = _current_node->_prev;
@@ -526,7 +526,7 @@ int list<T>::iter::find_index(list &a){
 
 
 template <class T>
-void list<T>::iter::operator--() {
+void list<T>::ListIterator::operator--() {
     _current_node = _current_node->_prev;
     // _index--;
 }
@@ -534,7 +534,7 @@ void list<T>::iter::operator--() {
 
 
 template <class T>
-bool list<T>::iter::operator==(iter &value) {
+bool list<T>::ListIterator::operator==(ListIterator &value) {
     bool ans = false;
     if (_current_node == value._current_node) ans = true;
     return ans;
@@ -542,7 +542,7 @@ bool list<T>::iter::operator==(iter &value) {
 
 
 template <class T>
-bool list<T>::iter::operator!=(iter &value) {
+bool list<T>::ListIterator::operator!=(ListIterator &value) {
     return !operator==(value);
 }
 
@@ -608,95 +608,13 @@ int main() {
     
     b.PrintList();
 
-    // list<int>::iter it(b._head->_next);
-    a.merge(b);
+    list<int>::ListIterator it(b._head->_next);
+    // a.merge(b);
+    a.splice(it,b);
 
     // a.swap(b);
     a.PrintList();
     // b.PrintList();
 
     // a.PrintList();
-
-    // list<int>::iter iterator(a._tail->_prev->_prev);
-    // std::cout<<iterator.find_index(a);
-    // list<int>::iter iterator2(a._head);
-    // a.insert(iterator2,123);
-    // a.PrintList();
-    // list<int>::iter iterator2(a._head);
-    // // --iterator2;
-    // a.swapper(iterator,iterator2);
-    // bool ans = iterator2==iterator;
-    // bool ans2 = iterator2!=iterator;
-    
-    // ++iterator;
-    // a.erase(iterator);
-    // // std::cout << &iterator << " ";
-    // ++iterator;
-    // a.erase(iterator);
-    // std::cout << &iterator;
-    // ++iterator;
-    // a.erase(iterator);
-    // ++iterator;
-    // a.erase(iterator);
-
-    // ++iterator;
-    // ++iterator;
-    // ++iterator;
-    // std::cout << *iterator << std::endl;
-    // iterator--;
-    // a.pop_front();
-    // a.pop_front();
-    // a.pop_front();
-    // a.pop_front();
-    // a.pop_front();
-    // a.pop_front();
-    
-    // std::cout << a.empty()<< '\n' << a.size()  <<  std::endl;
-
-
-    // a.push_back (2);
-    // a.push_back(3);
-    // a.push_back(4);
-    // a.push_back(5);
-    // a.push_back(6);
-    // a.pop_front();
-    // a.pop_front();
-    // a.pop_front();
-    // a.pop_front();
-    // a.pop_front();
-
-    // a.pop_back();
-    // a.pop_back();
-    // a.push_front(5);
-
-
-    // a.PrintList();
-    // a.unique();
-    // a.PrintList();
-
-
-    // a.reverse();
-    // a.PrintList();
-    // a.reverse();
-    // a.PrintList();
-    
-    // std::cout << a.size() << std::endl;
-    
-    // a.pop_back();
-    // a.pop_back();
-    // a.pop_back();
-    // a.pop_back();
-    // a.pop_front();
-    // a.pop_back();
-
-    // a.push_back(5);
-    // a.PrintList();
-    // a.push_front(7);
-    // a.printList();
-    // std::cout << std:: endl;
-    // a.printList();
-    
-
-    // std::cout << a._next->_data << std::endl;
-    // a.printList();
 }

@@ -53,34 +53,34 @@ void PrintList();
         int _size;
 
 
-        class iter {
+        class ListIterator {
                 public:
-                        iter();
-                        iter(Node* value);
-                        iter(const iter &value);
+                        ListIterator();
+                        ListIterator(Node* value);
+                        ListIterator(const ListIterator &value);
 
-                        ~iter();
+                        ~ListIterator();
                         Node* _current_node = nullptr;
                         T& operator*();
                         void operator++();
                         void operator--();
-                        bool operator==(iter &value);
-                        bool operator!=(iter &value);
+                        bool operator==(ListIterator &value);
+                        bool operator!=(ListIterator &value);
                         int find_index(list &a);
                         int _index = 0;
 
         };
-        using iterator = iter;
-        using const_iterator = iter;
+        using iterator = ListIterator;
+        using const_iterator = ListIterator;
         public:
-        void erase(iter pos);	//erases element at pos
+        void erase(ListIterator pos);	//erases element at pos
         void kind_of_qs(int head_iter, int tail_iter);
         int partition(int start, int end);
-        iter insert(iter pos, const_reference value); //	inserts elements into concrete pos and returns the iterator that points to the new element
+        ListIterator insert(ListIterator pos, const_reference value); //	inserts elements into concrete pos and returns the iterator that points to the new element
         void splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
-        iter Begin();
-        iter End();  
-        void swapper(iter a, iter b);
+        ListIterator Begin();
+        ListIterator End();  
+        void swapper(ListIterator a, ListIterator b);
 };
 
 
