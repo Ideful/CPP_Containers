@@ -115,7 +115,6 @@ void list<T>::Destructor(){
         }
     }
     if (_head) delete _head;
-    // if (_tail) delete _tail;
     if (_end && _end != _head) delete _end;
     _head = _tail = _end = nullptr;
 }
@@ -160,9 +159,7 @@ void list<T>::Clear() {
         delete _head; // a esli eto ne chislo???
         _head = tmp;
     }
-    if (_end) {
-
-    }
+    if (_end) delete _end;
 }
 
 
@@ -220,7 +217,6 @@ void list<T>::PopFront(){
         _head = newnode;
         newnode = newnode->_prev;
         delete newnode;
-
         _head->_prev = _end;
         _end->_next = _head;
     }
@@ -241,7 +237,6 @@ void list<T>::PopBack(){
         _tail = tmp;
         tmp = tmp->_next;
         delete tmp;
-
         _tail->_next = _end;    
         _end->_prev = _tail;
     }
@@ -336,7 +331,7 @@ void list<T>::Reverse(){
 
 
 template <class T>
-void list<T>::Erase(ListIterator pos) {
+void list<T>::Erase(typename list<T>::iterator pos) {
     if (_size == 0) throw std::out_of_range("list is empty");
     if (_size == 1) PopBack(); // eto ne to4no
     else {
@@ -369,7 +364,7 @@ typename list<T>::iterator list<T>::Insert(iterator pos, const_reference value) 
         PushBack(value);
         --newpos;
     } else {
-        int index = pos.find_index(*this);
+        int index = pos.FindIndex(*this);
         for (int i = 0; i < index; i++) {
             ++newpos; // tut mb kosyaque
         }
@@ -377,8 +372,9 @@ typename list<T>::iterator list<T>::Insert(iterator pos, const_reference value) 
 
         newpos._current_node->_prev->_next = newval;
         newval->_next = newpos._current_node;
-        newpos._current_node->_prev = newval;
+
         newval->_prev = newpos._current_node->_prev;
+        newpos._current_node->_prev = newval;
     }
     return newpos;
 }
@@ -400,11 +396,11 @@ void list<T>::Unique(){
 
 
 template <class T>
-void list<T>::kind_of_qs(int start, int end) {
+void list<T>::KindOfQS(int start, int end) {
     if (start < end) {
         int pivot_index = Partition(start,end);
-        kind_of_qs(start, pivot_index - 1);
-        kind_of_qs(pivot_index + 1, end);
+        KindOfQS(start, pivot_index - 1);
+        KindOfQS(pivot_index + 1, end);
     }
 }
 
@@ -445,8 +441,8 @@ void list<T>::Sort(){
 // throw if T is not a number
     iterator head_iter(_head);
     iterator end(_tail);
-    int end_iter = end.find_index(*this);
-    kind_of_qs(0, end_iter);
+    int end_iter = end.FindIndex(*this);
+    KindOfQS(0, end_iter);
 }
 
 template <class T>
@@ -462,7 +458,6 @@ void list<T>::PrintList() {
     }
 
 }
-
 
 // iterator ####################################################################
 
@@ -483,16 +478,9 @@ list<T>::ListIterator::ListIterator(const ListIterator &value){
 
 
 template <class T>
-list<T>::ListIterator::~ListIterator() {
-    _current_node = nullptr;
-}
-
-
-template <class T>
-T& list<T>::ListIterator::operator*() {
+typename list<T>::reference list<T>::ListIterator::operator*() {
     return _current_node->_data;
 }
-
 
 
 template <class T>
@@ -500,8 +488,9 @@ void list<T>::ListIterator::operator++() {
     _current_node = _current_node->_next;
 }
 
+
 template <class T>
-int list<T>::ListIterator::find_index(list &a){ 
+int list<T>::ListIterator::FindIndex(list &a){ 
     size_type res = 0;
     Node * tmp = _current_node;
     while(tmp != a._head){ 
@@ -518,12 +507,9 @@ void list<T>::ListIterator::operator--() {
 }
 
 
-
 template <class T>
 bool list<T>::ListIterator::operator==(ListIterator &value) {
-    bool ans = false;
-    if (_current_node == value._current_node) ans = true;
-    return ans;
+    return (_current_node == value._current_node) ? true : false;
 }
 
 
@@ -533,7 +519,52 @@ bool list<T>::ListIterator::operator!=(ListIterator &value) {
 }
 
 
-// inerator ####################################################################
+// const iterator ##############################################################
+
+
+template <class T>
+list<T>::ListConstIterator::ListConstIterator(ListConstIterator &value){
+    _current_node = value._current_node;
+}
+
+
+template <class T>
+list<T>::ListConstIterator::ListConstIterator(Node* value) {
+    _current_node = value;
+}
+
+
+template <class T>
+typename list<T>::const_reference list<T>::ListConstIterator::operator*() {
+    return _current_node->_data;
+}
+
+
+template <class T>
+void list<T>::ListConstIterator::operator--() {
+    _current_node = _current_node->_prev;
+}
+
+
+template <class T>
+void list<T>::ListConstIterator::operator++() {
+    _current_node = _current_node->_next;
+}
+
+
+template <class T>
+bool list<T>::ListConstIterator::operator==(ListConstIterator &value) {
+    return (_current_node == value._current_node) ? true : false;
+}
+
+
+template <class T>
+bool list<T>::ListConstIterator::operator!=(ListConstIterator &value) {
+    return !(operator==(value));
+}
+
+
+
 
 
 int main() {
@@ -557,8 +588,14 @@ int main() {
 
     a.PrintList();
     list<int>::iterator qwe(a._head->_next);
-    qwe = a.Insert(qwe,22);
-    a.Sort();
+    *qwe = 12321421;
+    std::cout<<"\n\n\n"<<a._head->_next->_data<<std::endl;
+
+    list<int>::const_iterator qwew(a._head->_next);
+    // *qwew = 98;
+    std::cout<<"\n\n\n"<<a._head->_next->_data<<std::endl;
+    // qwe = a.Insert(qwe,22);
+    // a.Sort();
     // a.PushFront(7);
     // a.PushFront(8);
     // a.PushFront(9);
@@ -585,7 +622,7 @@ int main() {
     // a.PushFront(2);
     // a.PushFront(1);
     // a.PushFront(2);
-    a.PrintList();
+    // a.PrintList();
     // std::cout<<a._size<<"\n\n\n";
     // a.push_back(0);
     // a.PushFront(6);
@@ -595,23 +632,4 @@ int main() {
     // std::cout << b.max_size();
     // std::cout << ans << std::endl;
     // std::cout << ans2 << std::endl;
-    // b.PushFront(1);
-    // b.PushFront(2);
-    // b.PushFront(3);
-    // b.PushFront(4);
-    // b.PushFront(5);
-    // b.PushFront(6);
-    
-    
-    // b.PrintList();
-
-    // list<int>::ListIterator it(b._head->_next);
-    // a.merge(b);
-    // a.splice(it,b);
-
-    // a.swap(b);
-    // a.PrintList();
-    // b.PrintList();
-
-    // a.PrintList();
 }

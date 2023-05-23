@@ -29,8 +29,8 @@ class list {
         size_type Size();	// returns size
         size_type MaxSize();	// check node qty
         void Clear(); //	clears the contents
-        void PushFront(T value); //	adds an element to the end
-        void PushBack(T value); //	adds an elements to the head
+        void PushFront(value_type value); //	adds an element to the end
+        void PushBack(value_type value); //	adds an elements to the head
         void PopFront(); //	removes the first element
         void PopBack(); //	removes the last element
         void Swap(list& other);  //	swaps the contents
@@ -42,7 +42,7 @@ class list {
         
         // fields:
         struct Node{
-                T _data;
+                value_type _data;
                 Node *_prev;
                 Node *_next;
                 Node() : _data(), _prev(nullptr), _next(nullptr){};
@@ -58,28 +58,40 @@ class list {
                         ListIterator();
                         ListIterator(Node* value);
                         ListIterator(const ListIterator &value);
-                        ~ListIterator();
-                        Node* _current_node = nullptr;
-                        T& operator*();
+                        ~ListIterator(){};
+                        reference operator*();
                         void operator++();
                         void operator--();
                         bool operator==(ListIterator &value);
                         bool operator!=(ListIterator &value);
-                        int find_index(list &a);
-                        int _index = 0;
+                        int FindIndex(list &a);
+
+                        Node* _current_node = nullptr;
+                        int _index;
         };
         using iterator = ListIterator;
 
-        class ListConstIterator:ListIterator{
+        class ListConstIterator: public ListIterator{
                 public:
-
+                        ListConstIterator():_current_node(nullptr){};
+                        ListConstIterator(Node* value);
+                        ListConstIterator(ListConstIterator &value); // hz
+                        // ~ListConstIterator():{};
+                        const_reference operator*();
+                        void operator++();
+                        void operator--();
+                        bool operator==(ListConstIterator &value);
+                        bool operator!=(ListConstIterator &value);
+                        // int FindIndex(list &a);      // ??? a nado li eto
+                        
+                        Node* _current_node = nullptr;  
+                        // int _index();        // ??? a nado li eto
         };
-        using const_iterator = ListIterator;
-
+        using const_iterator = ListConstIterator;
 
         public:
         void Erase(iterator pos);	//erases element at pos
-        void kind_of_qs(int head_iter, int tail_iter);
+        void KindOfQS(int head_iter, int tail_iter);
         int Partition(int start, int end);
         void Splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
         void Swapper(iterator a, iterator b);
