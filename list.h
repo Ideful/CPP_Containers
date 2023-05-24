@@ -21,25 +21,24 @@ class list {
         list& operator=(list &&l);
         list& operator=(list &l);
 
-        void Destructor();
         void ParCons(size_type n);
-        void Cpy(list &l);
+        void Cpy(const list &l);
 
-        const_reference Front();	  //      access the first element
-        const_reference Back();	  //      access the last element
-        bool Empty(); //	checks whether the container is empty
-        size_type Size();	// returns size
-        size_type MaxSize();	// check node qty
-        void Clear(); //	clears the contents
+        const_reference Front() const noexcept;	  //      access the first element
+        const_reference Back() const noexcept;	  //      access the last element
+        bool Empty() const noexcept;  //	checks whether the container is empty
+        size_type Size() const noexcept;	// returns size
+        size_type MaxSize() const noexcept;	// check node qty
+        void Clear() noexcept; //	clears the contents
         void PushFront(value_type value); //	adds an element to the end
         void PushBack(value_type value); //	adds an elements to the head
         void PopFront(); //	removes the first element
         void PopBack(); //	removes the last element
         void Swap(list& other);  //	swaps the contents
         void Merge(list& other); //	merges two sorted lists
-        void Reverse(); //	reverses the order of the elements
-        void Unique(); //	removes consecutive duplicate elements
-        void Sort(); //	sorts the elements
+        void Reverse() noexcept; //	reverses the order of the elements
+        void Unique()noexcept; //	removes consecutive duplicate elements
+        void Sort()noexcept; //	sorts the elements
         void PrintList();
         
         // fields:
@@ -50,11 +49,13 @@ class list {
                 Node() : _data(), _prev(nullptr), _next(nullptr){};
                 Node(T value) : _data(value), _prev(nullptr), _next(nullptr){};
         };
-        Node* _head;
-        Node* _tail;
-        Node* _end;
-        int _size;
-
+        private:
+                Node* _head;
+                Node* _tail;
+                Node* _end;
+                int _size;
+        
+        public:
         class ListIterator {
                 public:
                         ListIterator();
@@ -90,10 +91,10 @@ class list {
         using const_iterator = ListConstIterator;
 
         public:
-        void Erase(iterator pos);	//erases element at pos
+        void Erase(iterator pos) noexcept;	//erases element at pos
         void KindOfQS(int head_iter, int tail_iter);
         int Partition(int start, int end);
-        void Splice(const_iterator pos, list& other); //	transfers elements from list other starting from pos
+        void Splice(const_iterator pos, list& other) noexcept; //	transfers elements from list other starting from pos
         void Swapper(iterator a, iterator b);
         iterator Begin();
         iterator End();  
