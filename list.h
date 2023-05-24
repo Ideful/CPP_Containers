@@ -23,7 +23,7 @@ class list {
 
         void Destructor();
         void ParCons(size_type n);
-        void Cpy(list l);
+        void Cpy(list &l);
 
         const_reference Front();	  //      access the first element
         const_reference Back();	  //      access the last element

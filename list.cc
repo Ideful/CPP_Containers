@@ -1,5 +1,6 @@
 // https://github.com/Ideful/CPP_Containers
 #include "list.h"
+#include <list>
 
 template <class T>
 list<T>::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_size(0) {}
@@ -63,7 +64,7 @@ list<T>::list(list&& l) {
 
 
 template <class T>
-void list<T>::Cpy(list l) {
+void list<T>::Cpy(list &l) {
     Destructor();
     ParCons(l._size);
     Node *tmp(l._head);
@@ -117,6 +118,7 @@ void list<T>::Destructor(){
     if (_head) delete _head;
     if (_end && _end != _head) delete _end;
     _head = _tail = _end = nullptr;
+    _size = 0;
 }
 
 
@@ -147,13 +149,14 @@ typename list<T>::const_reference list<T>::Back() {
 
 template <class T>
 void list<T>::Clear() {
-    while(_head != _end) {
-        Node *tmp = _head->_next;
-        delete _head; // a esli eto ne chislo???
-        _head = tmp;
-    }
-    if (_end) delete _end;
-    _size = 0;
+    // while(_head != _end) {
+    //     Node *tmp = _head->_next;
+    //     delete _head; // a esli eto ne chislo???
+    //     _head = tmp;
+    // }
+    // if (_end) delete _end;
+    // _size = 0;
+    Destructor();
 }
 
 
@@ -253,13 +256,15 @@ typename list<T>::size_type list<T>::Size() { // ne rabotaet s pop'om. hz po4
 
 template <class T>
 typename list<T>::ListIterator list<T>::Begin() {
-    return _head;
+    ListIterator res(_head);
+    return res;
 }
 
 
 template <class T>
 typename list<T>::ListIterator  list<T>::End() {
-    return _end;
+    ListIterator res(_end);
+    return res;
 }
 
 
@@ -276,24 +281,30 @@ void list<T>::Swap(list& other){
 
 template <class T>
 void list<T>::Merge(list& other){
-    // iterator thisiter = Begin();
-    // iterator iter = other.Begin();
-    // if (!_head) {
-    //     for (; iter != other.End(); ++iter) {
-    //         PushBack(*iter);
-    //     }
-    // } else {
-    //     for (; iter != other.End() && thisiter != End();) {
-    //         if (*iter <= *thisiter) {
-    //             Insert(iter, *iter);
-    //             ++iter;
-    //         } 
-    //         else if (*iter > *thisiter && thisiter != End()) ++iter;
-    //         if (thisiter == End()) PushBack(*iter);
-    //     }
-    // }
-    // other.Clear();
+    iterator this_iter = Begin();
+    iterator this_end_iter = End();
+    iterator other_iter = other.Begin();
+    iterator enditer = other.End();
+    if (other._head != _head) {
+        if (!_head) Cpy(other);
+        else {
+            while(this_iter != this_end_iter || other_iter != enditer){
+                if (*other_iter <= *this_iter) {
+                    Insert(this_iter,*other_iter);
+                    ++other_iter;
+                } else if (*other_iter > *this_iter && this_iter != this_end_iter) {
+                    ++this_iter;
+                }
+                if (this_iter == this_end_iter) {
+                    PushBack(*other_iter);
+                    ++other_iter;
+                } 
+            }
+        }
+    }
+    other.Clear();
 }
+
 
 template <class T>
 void list<T>::Splice(typename list<T>::const_iterator pos, list& other) {
@@ -373,7 +384,7 @@ typename list<T>::iterator list<T>::Insert(iterator pos, const_reference value) 
     iterator newpos(_head);
     if (pos._current_node == _head) {
         PushFront(value);
-    } else if (pos._current_node == _tail) {
+    } else if (pos._current_node == _end) {
         PushBack(value);
         --newpos;
     } else {
@@ -404,7 +415,6 @@ void list<T>::Unique(){
             }
         }
     }
-
 }
 
 
@@ -603,6 +613,13 @@ typename list<T>::iterator list<T>::Emplace(const_iterator pos, Args &&...args) 
     return iter;
 }
 
+void print(std::list<int>  list)
+{
+    for (auto const &i: list) {
+        std::cout << i << std::endl;
+    }
+}
+ 
 
 int main() {
     // list<std::string> a;
@@ -610,19 +627,34 @@ int main() {
     // std::string q("zxc");
     // a.PushFront(z);
     // a.PushFront(q);
-
+    // std::list<int> qwe;
+    // std::list<int> zxc = {2,4,6,8};
+    // std::list<int> zxc = {0,2,4,6};
+    std::list<int> zxc = {2,4,6,8,9};
+    std::list<int> qwe = {1,3,5,7};
+    qwe.merge(zxc);
+    print(qwe);
     // list<int> a(4);
     // list<int> a{11, 22, 13, 434, 5};
+    std::cout<<"\n\n";
+    // list<int>a = {1,3,5,6,7};
+    // list<int>b = {4,2,0,9};
     list<int>a;
-    a.PushFront(7);
-    a.PushFront(8);
-    a.PushFront(9);
-    a.PushFront(10);
-    a.PushFront(11);
-    a.PushFront(22);
-    a.PushFront(12);
+    a.PushBack(1);
+    a.PushBack(3);
+    a.PushBack(5);
+    a.PushBack(7);
+    list<int>b;
+    b.PushBack(2);
+    b.PushBack(4);
+    b.PushBack(6);
+    b.PushBack(8);
+    b.PushBack(9);
+    b.PushBack(10);
 
+    // b.PrintList();
 
+    a.Merge(b);
     a.PrintList();
     // list<int>::iterator qwe(a._head->_next);
     // *qwe = 12321421;
@@ -646,9 +678,9 @@ int main() {
     // a.push_back(-2);
     // a.push_back(0);
     // a.ParCons(8);
-    list<int>b;
-    b = a;
-    a.Merge(b);
+    // b = a;
+    // a.Merge(b);
+    // a.PrintList();
     // a.erase(qwe);
 
     // list<int> b(std::move(a));
