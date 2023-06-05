@@ -1,7 +1,7 @@
 // https://github.com/Ideful/CPP_Containers
 #include "list.h"
 #include <list>
-
+namespace s21{
 template <class T>
 list<T>::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_size(0) {}
 
@@ -618,7 +618,7 @@ void print(std::list<int>  list)
         std::cout << i << std::endl;
     }
 }
- 
+}
 
 int main() {
     // list<std::string> a;
@@ -639,8 +639,8 @@ int main() {
     // std::cout<<"\n\n";
     // list<int>a = {1,3,5,6,7};
     // list<int>b = {4,2,0,9};
-    list<int>a;
-    list<int>b;
+    s21::list<int>a;
+    s21::list<int>b;
     // a.PushBack(1);
     // a.PushBack(3);
     // a.PushBack(5);

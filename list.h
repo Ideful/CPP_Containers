@@ -3,7 +3,7 @@
 #include <iostream>
 #include <limits>
 
-
+namespace s21{
 template <class T>
 
 class list {
@@ -107,6 +107,7 @@ class list {
         template <typename... Args>
         void EmplaceBack(Args&&... args);
 };
+}
 #endif //  SRC_LIST_H_
 
 // include tpp i ubrat iz tpp header
