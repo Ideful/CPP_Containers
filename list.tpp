@@ -1,14 +1,14 @@
 // https://github.com/Ideful/CPP_Containers
-#include "list.h"
-#include <list>
-namespace s21{
-template <class T>
-list<T>::list() : _head(nullptr),_tail(nullptr),_end(nullptr),_size(0) {}
+// #include "list.h"
 
-template <class T>
-void list<T>::ParCons(size_type n){
+namespace s21{
+template <typename T>
+List<T>::List() : _head(nullptr),_tail(nullptr),_end(nullptr),_size(0) {}
+
+template <typename T>
+void List<T>::ParCons(size_type n){
     _head = _tail = _end = nullptr, _size = 0; 
-    for(int i = 0; i < n; i++) {
+    for(size_type i = 0; i < n; i++) {
         Node *tmp = new Node();
         if (_head == nullptr) {
             _head = _tail = tmp;
@@ -27,22 +27,36 @@ void list<T>::ParCons(size_type n){
 }
 
 
-template <class T>
-list<T>::list(size_type n):list() { 
+template <typename T>
+List<T>::List(size_type n):List() { 
     ParCons(n);
 }
 
 
-template <class T>
-list<T>::list(std::initializer_list<value_type> const &items){
-    for(auto iter = items.begin(); iter != items.end(); ++ iter){
-        PushBack(*iter);
-    }
+// template <typename T>
+// List<T>::List(std::initializer_list<value_type> const &items){
+//     for(auto iter = items.begin(); iter != items.end(); ++iter){
+//         std::cout << iter;
+//         PushBack(*iter);
+//     }
+// }
+
+
+template <typename T>
+List<T>::List(std::initializer_list<value_type> const& items) {
+  typename std::initializer_list<T>::iterator it = items.begin();
+  value_type size = 0;
+  for (size_type i = 0; items.size() > i; i++) {
+    PushBack(*it);
+    it++;
+    size++;
+  }
+  if (_end) _end->_data = size;
 }
 
 
-template <class T>
-list<T>::list(const list &l) : list(l._size) {
+template <typename T>
+List<T>::List(const List &l) : List(l._size) {
     ListIterator ListIterator(l._head);
     while(_head != _end) {
         _head->_data = *ListIterator;
@@ -53,8 +67,8 @@ list<T>::list(const list &l) : list(l._size) {
 }
 
 
-template <class T>
-list<T>::list(list&& l) {
+template <typename T>
+List<T>::List(List&& l) {
     _size = l._size;
     _head = l._head;
     _end = l._end;
@@ -63,8 +77,8 @@ list<T>::list(list&& l) {
 }
 
 
-template <class T>
-void list<T>::Cpy(const list &l) {
+template <typename T>
+void List<T>::Cpy(const List &l) {
     Clear();
     ParCons(l._size);
     Node *tmp(l._head);
@@ -80,61 +94,61 @@ void list<T>::Cpy(const list &l) {
 }
 
 
-template <class T>
-typename list<T>::list& list<T>::operator=(list &&l)  {
+template <typename T>
+typename List<T>::List& List<T>::operator=(List &&l)  {
     Cpy(l);
     return *this;
 }
 
 
-template <class T>
-typename list<T>::list& list<T>::operator=(list &l)  {
+template <typename T>
+typename List<T>::List& List<T>::operator=(List &l)  {
     Cpy(l);
     return *this; 
 }
 
 
-template <class T>
-bool list <T>::Empty() const noexcept {
+template <typename T>
+bool List <T>::Empty() const noexcept {
     return (_head == nullptr) ? true : false;
 }
 
 
-template <class T>
-void list<T>::Swapper(iterator a, iterator b){
+template <typename T>
+void List<T>::Swapper(iterator a, iterator b){
     value_type tmp = *a;
     *a = *b;
     *b = tmp;
 }
 
 
-template <class T>
-list<T>::~list(){ 
+template <typename T>
+List<T>::~List(){ 
     Clear();
 }
 
-template <class T>
-typename list<T>::size_type list<T>::MaxSize() const noexcept{
+template <typename T>
+typename List<T>::size_type List<T>::MaxSize() const noexcept{
     return std::numeric_limits<std::size_t>::max() / sizeof(T);
 }
 
 // ######################################################
 
 
-template <class T>
-typename list<T>::const_reference list<T>::Front() const noexcept {
+template <typename T>
+typename List<T>::const_reference List<T>::Front() const noexcept {
     return _head->_data;
 }
 
 
-template <class T>
-typename list<T>::const_reference list<T>::Back() const noexcept {
+template <typename T>
+typename List<T>::const_reference List<T>::Back() const noexcept {
     return _tail->_data;
 }
 
 
-template <class T>
-void list<T>::Clear() noexcept{
+template <typename T>
+void List<T>::Clear() noexcept{
     if (_head && _head != _end) {
         while(_head->_next != _end) {
             Node *tmp = _head->_next;
@@ -149,8 +163,8 @@ void list<T>::Clear() noexcept{
 }
 
 
-template <class T>
-void list<T>::PushBack(typename list<T>::value_type value){
+template <typename T>
+void List<T>::PushBack(typename List<T>::value_type value){
     Node* tmp = new Node(value);
     if(_head == nullptr){
         _head = _tail = tmp;
@@ -169,8 +183,8 @@ void list<T>::PushBack(typename list<T>::value_type value){
 }
 
 
-template <class T>
-void list<T>::PushFront(typename list<T>::value_type value){
+template <typename T>
+void List<T>::PushFront(typename List<T>::value_type value){
     Node* newnode = new Node(value);
     if (!_head) {
         _head = _tail = newnode;
@@ -189,8 +203,8 @@ void list<T>::PushFront(typename list<T>::value_type value){
 }
 
 
-template <class T>
-void list<T>::PopFront(){
+template <typename T>
+void List<T>::PopFront(){
     if (_head == nullptr) throw std::out_of_range("nothing to pop");
     if (_size == 1) {
         delete _end;
@@ -209,8 +223,8 @@ void list<T>::PopFront(){
 }
 
 
-template <class T>
-void list<T>::PopBack(){
+template <typename T>
+void List<T>::PopBack(){
     if(_head == nullptr) throw std::out_of_range("nothing to pop");
     if (_size == 1) {
         delete _end;
@@ -229,8 +243,8 @@ void list<T>::PopBack(){
 }
 
 
-template <class T>
-typename list<T>::size_type list<T>::Size() const noexcept { // 
+template <typename T>
+typename List<T>::size_type List<T>::Size()  noexcept { // 
     int res = 0;
     while(_head != _end) {
         _head = _head->_next;
@@ -242,23 +256,23 @@ typename list<T>::size_type list<T>::Size() const noexcept { //
 }
 
 
-template <class T>
-typename list<T>::ListIterator list<T>::Begin() {
+template <typename T>
+typename List<T>::ListIterator List<T>::Begin() {
     ListIterator res(_head);
     return res;
 }
 
 
-template <class T>
-typename list<T>::ListIterator  list<T>::End() {
-    ListIterator res(_end);
+template <typename T>
+typename List<T>::ListIterator  List<T>::End() {
+    iterator res(_end);
     return res;
 }
 
 
-template <class T>
-void list<T>::Swap(list& other){
-    list tmp;
+template <typename T>
+void List<T>::Swap(List& other){
+    List tmp;
     tmp.Cpy(other);
     other.Clear();
     other.Cpy(*this);
@@ -267,8 +281,8 @@ void list<T>::Swap(list& other){
 }
 
 
-template <class T>
-void list<T>::Merge(list& other){
+template <typename T>
+void List<T>::Merge(List& other){
     iterator this_iter = Begin();
     iterator other_iter = other.Begin();
     if (other._head != _head) {
@@ -292,8 +306,8 @@ void list<T>::Merge(list& other){
 }
 
 
-template <class T>
-void list<T>::Splice(typename list<T>::const_iterator pos, list& other) noexcept{
+template <typename T>
+void List<T>::Splice(typename List<T>::const_iterator pos, List& other) noexcept{
     iterator iter(other._head);
     int flag = 0;
     for(int i = 0; i < other.Size();i++) {
@@ -318,8 +332,8 @@ void list<T>::Splice(typename list<T>::const_iterator pos, list& other) noexcept
 }
 
 
-template <class T>
-void list<T>::Reverse() noexcept{
+template <typename T>
+void List<T>::Reverse() noexcept{
     if (_size > 1) {
         ListIterator iterator_head(_head);
         ListIterator iterator_tail(_tail);
@@ -342,8 +356,8 @@ void list<T>::Reverse() noexcept{
 }
 
 
-template <class T>
-void list<T>::Erase(typename list<T>::iterator pos) noexcept {
+template <typename T>
+void List<T>::Erase(typename List<T>::iterator pos) noexcept {
     iterator iter(_head);
     int flag = 0;
     for(int i = 0; i < Size();i++) {
@@ -374,8 +388,8 @@ void list<T>::Erase(typename list<T>::iterator pos) noexcept {
 }
 
 
-template <class T>
-typename list<T>::iterator list<T>::Insert(iterator pos, const_reference value) {
+template <typename T>
+typename List<T>::iterator List<T>::Insert(iterator pos, const_reference value) {
     iterator newpos(_head);
     int flag = 0;
     for(int i = 0; i < Size();i++) {
@@ -404,8 +418,8 @@ typename list<T>::iterator list<T>::Insert(iterator pos, const_reference value) 
 }
 
 
-template <class T>
-void list<T>::Unique() noexcept{
+template <typename T>
+void List<T>::Unique() noexcept{
     ListIterator end_iter(_end);
     for(ListIterator iter_i(_head); iter_i != end_iter; ++iter_i) {
         for(ListIterator iter_j(iter_i._current_node->_next); iter_j != end_iter; ++iter_j) {
@@ -418,8 +432,8 @@ void list<T>::Unique() noexcept{
 }
 
 
-template <class T>
-void list<T>::KindOfQS(int start, int end) {
+template <typename T>
+void List<T>::KindOfQS(int start, int end) {
     if (start < end) {
         int pivot_index = Partition(start,end);
         KindOfQS(start, pivot_index - 1);
@@ -428,8 +442,8 @@ void list<T>::KindOfQS(int start, int end) {
 }
 
 
-template <class T>
-int list<T>::Partition(int start, int end) {
+template <typename T>
+int List<T>::Partition(int start, int end) {
     iterator pivot(_head);
     for(int i = 0; i < end; i++) {
         ++pivot;
@@ -459,16 +473,16 @@ int list<T>::Partition(int start, int end) {
 }
 
 
-template <class T>
-void list<T>::Sort() noexcept{
+template <typename T>
+void List<T>::Sort() noexcept{
     iterator head_iter(_head);
     iterator end(_tail);
     int end_iter = end.FindIndex(*this);
     KindOfQS(0, end_iter);
 }
 
-template <class T>
-void list<T>::PrintList() {
+template <typename T>
+void List<T>::PrintList() {
     int k = 0;
     if (_head != nullptr) {
         while(_head != _end) {
@@ -481,38 +495,43 @@ void list<T>::PrintList() {
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
 // iterator ####################################################################
 
-template <class T>
-list<T>::ListIterator::ListIterator():_current_node(nullptr) { 
+template <typename T>
+List<T>::ListIterator::ListIterator():_current_node(nullptr) { 
 }
 
 
-template <class T>
-list<T>::ListIterator::ListIterator(Node* value):_current_node(value) { 
-}
-
-
-template <class T>
-list<T>::ListIterator::ListIterator(const ListIterator &value){ 
-    _current_node = value._current_node;
-}
-
-
-template <class T>
-typename list<T>::reference list<T>::ListIterator::operator*() {
+template <typename T>
+typename List<T>::reference List<T>::ListIterator::operator*() {
     return _current_node->_data;
 }
 
 
-template <class T>
-void list<T>::ListIterator::operator++() {
+template <typename T>
+void List<T>::ListIterator::operator++() {
     _current_node = _current_node->_next;
 }
 
+template <typename T>
+void List<T>::ListIterator::operator--() {
+    _current_node = _current_node->_prev;
+}
 
-template <class T>
-int list<T>::ListIterator::FindIndex(list &a){ 
+
+template <typename T>
+int List<T>::ListIterator::FindIndex(List &a){ 
     size_type res = 0;
     Node * tmp = _current_node;
     while(tmp != a._head){ 
@@ -522,189 +541,159 @@ int list<T>::ListIterator::FindIndex(list &a){
     return res;
 }
 
+template <typename T>
+bool List<T>::ListIterator::operator==(const ListIterator &other) const{
+    return (_current_node==other._current_node);
+}
 
-template <class T>
-void list<T>::ListIterator::operator--() {
-    _current_node = _current_node->_prev;
+template <typename T>
+bool List<T>::ListIterator::operator!=(const ListIterator &other) const{
+    return (_current_node!=other._current_node);
 }
 
 
-template <class T>
-bool list<T>::ListIterator::operator==(ListIterator &value) {
-    return (_current_node == value._current_node) ? true : false;
+
+template <typename T>
+typename List<T>::ListIterator& List<T>::ListIterator::operator=(ListIterator other) noexcept{
+    _current_node = other._current_node;
+    _index = other._index;
+    return *this;
 }
-
-
-template <class T>
-bool list<T>::ListIterator::operator!=(ListIterator &value) {
-    return !operator==(value);
-}
-
 
 // const iterator ##############################################################
 
-
-template <class T>
-list<T>::ListConstIterator::ListConstIterator(ListConstIterator &value){
-    _current_node = value._current_node;
-}
-
-
-template <class T>
-list<T>::ListConstIterator::ListConstIterator(Node* value) {
-    _current_node = value;
-}
-
-
-template <class T>
-typename list<T>::const_reference list<T>::ListConstIterator::operator*() {
+template <typename T>
+typename List<T>::const_reference List<T>::ListConstIterator::operator*() {
     return _current_node->_data;
 }
 
 
-template <class T>
-void list<T>::ListConstIterator::operator--() {
-    _current_node = _current_node->_prev;
+template <typename T>
+typename List<T>::ListConstIterator& List<T>::ListConstIterator::operator=(ListConstIterator other){
+    _current_node = other._current_node;
+    return *this;
 }
 
 
-template <class T>
-void list<T>::ListConstIterator::operator++() {
-    _current_node = _current_node->_next;
-}
-
-
-// template <class T>
-// bool list<T>::ListConstIterator::operator==(ListConstIterator &value) {
-//     return (_current_node == value._current_node) ? true : false;
-// }
-
-
-// template <class T>
-// bool list<T>::ListConstIterator::operator!=(ListConstIterator &value) {
-//     return !(operator==(value));
-// }
 
 
 // bonus          ##############################################################
 
 
-template <class T>
+template <typename T>
 template <typename... Args>
-void list<T>::EmplaceFront(Args &&...args) {
+void List<T>::EmplaceFront(Args &&...args) {
     ([&] { PushFront(args); }(), ...);
 }
 
 
-template <class T>
+template <typename T>
 template <typename... Args>
-void list<T>::EmplaceBack(Args &&...args) {
+void List<T>::EmplaceBack(Args &&...args) {
     ([&] { PushBack(args); }(), ...);
 }
 
 
-template <class T>
+template <typename T>
 template <typename... Args>
-typename list<T>::iterator list<T>::Emplace(const_iterator pos, Args &&...args) {
+typename List<T>::iterator List<T>::Emplace(const_iterator pos, Args &&...args) {
     iterator iter = pos;    
     ([&] { Insert(pos, args); }(), ...);
     --iter;
     return iter;
 }
 
-void print(std::list<int>  list)
-{
-    for (auto const &i: list) {
-        std::cout << i << std::endl;
-    }
+// void print(std::List<int>  List)
+// {
+//     for (auto const &i: List) {
+//         std::cout << i << std::endl;
+//     }
+// }
 }
-}
 
-int main() {
-    // list<std::string> a;
-    // std::string z("qwe");
-    // std::string q("zxc");
-    // a.PushFront(z);
-    // a.PushFront(q);
-    std::list<int> qwe;
-    std::list<int> zxc = {2,4,6,8};
-    // std::list<int> zxc = {0,2,4,6};
-    // std::list<int> zxc = {2,4,6,8,9};
-    // std::list<int> qwe = {1,3,5,7};
-    // qwe.swap(zxc);
-    qwe.front();
-    // print(qwe);
-    // list<int> a(4);
-    // list<int> a{11, 22, 13, 434, 5};
-    // std::cout<<"\n\n";
-    // list<int>a = {1,3,5,6,7};
-    // list<int>b = {4,2,0,9};
-    s21::list<int>a;
-    s21::list<int>b;
-    // a.PushBack(1);
-    // a.PushBack(3);
-    // a.PushBack(5);
-    // a.PushBack(7);
-    // b.PushBack(2);
-    // b.PushBack(4);
-    // b.PushBack(6);
-    // b.PushBack(8);
-    // b.PushBack(9);
-    b.PushBack(10);
-    // std::cout <<a.Front();
-    a.Front();
-    // b.PrintList();
-    a.Swap(b);
-    // a.Merge(b);
-    a.PrintList();
-    // list<int>::iterator qwe(a._head->_next);
-    // *qwe = 12321421;
-    // std::cout<<"\n\n\n"<<a._head->_next->_data<<std::endl;
 
-    // list<int>::const_iterator qwew(a._head->_next);
-    // // *qwew = 98;
-    // // std::cout<<"\n\n\n"<<a._head->_next->_data<<std::endl;
-    // ++qwew;
-    // ++qwew;
-    // std::cout<<"\n\n\n"<<a.MaxSize()<<std::endl;
-    // qwe = a.Insert(qwe,22);
-    // a.Sort();
-    // a.PushFront(7);
-    // a.PushFront(8);
-    // a.PushFront(9);
-    // a.PushFront(10);
-    // a.PushFront(11);
-    // a.PushFront(12);
-    // a.PushFront(0);
-    // a.push_back(-2);
-    // a.push_back(0);
-    // a.ParCons(8);
-    // b = a;
-    // a.Merge(b);
-    // a.PrintList();
-    // a.erase(qwe);
 
-    // list<int> b(std::move(a));
-    // list <int> b;
-    // list <int> c;
-    // c = std::move(a);
-    // b = a;
+// int main() {
+//     // List<std::string> a;
+//     // std::string z("qwe");
+//     // std::string q("zxc");
+//     // a.PushFront(z);
+//     // a.PushFront(q);
+//     // std::list<int> qwe;
+//     // s21::List<int> zxc = {2,4,6,8};
+
+//     // s21::List<int> b;
+//     // b.PushBack(3);
+//     // b.PushBack(4);
+
+//     // s21::List<int>::const_iterator tst = b.Begin();
+
     
-    // c.PrintList();
-    // a.PushFront(6);
-    // a.PushFront(9);
-    // a.PushFront(1);
-    // a.PushFront(2);
-    // a.PushFront(1);
-    // a.PushFront(2);
-    // a.PrintList();
-    // std::cout<<a._size<<"\n\n\n";
-    // a.push_back(0);
-    // a.PushFront(6);
-    // list<int>b(a);
-    // b.PrintList();
-    // list<int> b(3);
-    // std::cout << b.max_size();
-    // std::cout << ans << std::endl;
-    // std::cout << ans2 << std::endl;
-}
+//     // s21::List<int>::iterator tst2 = b.Begin();
+//     // // s21::List<int>::iterator tst2;
+//     // // tst2 = b.Begin();
+//     // int r = *tst2;
+//     // ++tst2;
+//     // int r2 = *tst2;
+//     // std::cout << r << r2;
+
+
+//     s21::List<int> a2{2,3,4,5};
+//     s21::List<int>::ListIterator qwe(a2.Begin());
+//     std::cout<<*qwe;
+//     ++qwe;
+// std::cout<<*qwe;
+//     ++qwe;
+//     std::cout<<*qwe;
+//     ++qwe;
+//     std::cout<<*qwe;
+//     ++qwe;
+
+//     // tst = b.Begin();
+//     // std::cout<<*tst;
+//     // ++tst;
+//     // std::cout<<*tst;
+//     // s21::List<int>::const_iterator s21_iter(b.Begin());
+//     // s21::List<int>::const_iterator s21_iter2(b.Begin());
+//     // s21::List<int>::iterator s21_iter_c(b.Begin());
+//     // s21::List<int>::iterator s21_iter_c2(b.Begin());
+//     // // ++s21_iter;
+//     // // ++s21_iter_c;
+
+//     // std::list<int> a;
+//     // a.push_back(3);
+//     // a.push_back(4);
+//     // std::list<int>::iterator OG(a.begin());
+//     // std::list<int>::const_iterator OG_c(a.begin());
+//     // std::cout << *OG << *OG_c << std::endl;
+//     // ++OG;
+//     // ++OG_c;
+//     // std::cout << *OG << *OG_c << std::endl;
+
+
+//     // bool x = s21_iter==s21_iter2;
+//     // bool x2 = s21_iter_c==s21_iter_c2;
+//     // std::cout << x << '\n' << x2;
+
+
+//     // std::List<int> zxc = {0,2,4,6};
+//     // std::List<int> zxc = {2,4,6,8,9};
+//     // std::List<int> qwe = {1,3,5,7};
+//     // qwe.swap(zxc);
+
+//     // print(qwe);
+//     // List<int> a(4);
+//     // List<int> a{11, 22, 13, 434, 5};
+//     // std::cout<<"\n\n";
+//     // List<int>a = {1,3,5,6,7};
+//     // List<int>b = {4,2,0,9};
+//     // std::cout <<a.Front();
+//     // b.PrintList();
+//     // a.Merge(b);
+//     // a.PrintList();
+//     // List<int>::iterator qwe(a._head->_next);
+//     // *qwe = 12321421;
+//     // std::cout<<"\n\n\n"<<a._head->_next->_data<<std::endl;
+
+//     // List<int>::const_iterator qwew(a._head->_next);
+// }
