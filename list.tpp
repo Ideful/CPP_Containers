@@ -250,7 +250,7 @@ typename List<T>::size_type List<T>::Size()  noexcept { //
         _head = _head->_next;
         res++;
     }
-    _head = _end->_next;
+    if (_head) _head = _end->_next;
 
     return res;
 }
@@ -392,7 +392,7 @@ template <typename T>
 typename List<T>::iterator List<T>::Insert(iterator pos, const_reference value) {
     iterator newpos(_head);
     int flag = 0;
-    for(int i = 0; i < Size();i++) {
+    for(size_type i = 0; i < Size();i++) {
         if (newpos == pos) flag = 1;
         ++newpos;
     }

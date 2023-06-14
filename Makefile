@@ -5,7 +5,7 @@ SRC = list.tpp
 all: exec
 
 exec:
-	g++  -Wall -Werror -Wextra -std=c++17 -g *.cc -o test_exec
+	g++  -Wall -Werror -Wextra -std=c++17 -g *.cc -lgtest_main  -lgtest -lpthread -o test_exec
 	./test_exec
 
 leaks:
