@@ -1,5 +1,5 @@
-gccc = g++ -Wall -Werror -Wextra -Wall -Werror -Wextra
-FLAGS = -Wall -Werror -Wextra -O0 -g 
+gccc = g++ -Wall -Werror -Wextra 
+FLAGS = -Wall -Werror -Wextra  -g 
 SRC = list.tpp
 
 all: exec
@@ -13,9 +13,9 @@ leaks:
 	./test_exec
 
 test:
-	g++ -std=c++17 $(FLAGS) $(SRC) ContainerTest.cc -L.   -lgtest  --coverage -o test
-	./test
+	g++ -std=c++17 $(FLAGS) list.tpp ContainerTest.cc -L.  -lgtest  -o test_exec
+	./test_exec
 
 
 clean:
-	rm -rf ./test_exec ./test *.gcno
+	rm -rf ./test_exec ./test *.gcno ./test *.gcda

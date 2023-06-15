@@ -41,34 +41,39 @@ class List {
         void Unique()noexcept; //	removes consecutive duplicate elements
         void Sort()noexcept; //	sorts the elements
         void PrintList();
-        
+
         // fields:
         struct Node{
-                value_type _data = 0;
-                Node *_prev = nullptr;
-                Node *_next = nullptr;
+                value_type _data;
+                Node* _prev = nullptr;
+                Node* _next = nullptr;
                 Node() : _data(), _prev(nullptr), _next(nullptr){};
-                Node(T value) : _data(value), _prev(nullptr), _next(nullptr){};
+                Node(const T value) : _data(value), _prev(nullptr), _next(nullptr){};
         };
         private:
                 Node* _head = nullptr;
                 Node* _tail = nullptr;
-                Node* _end = nullptr;
+                Node* _end;
                 int _size;
-        
+                value_type _var = 0;
+                const_reference _variable = _var;
         public:
 
+        class ListConstIterator;
         class ListIterator {
                 public:
-                        ListIterator();
+                        ListIterator():_current_node(nullptr){}
                         ListIterator(Node* value):_current_node(value){}
-                        ListIterator(const ListIterator &value):_current_node(value._current_node){}
+                        ListIterator(const ListIterator &value):_current_node(value._current_node), _index(value._index){}
+                        ListIterator(const ListConstIterator &value):_current_node(value._current_node), _index(value._index){}
                         ~ListIterator(){};
                         reference operator*();
-                        void operator++();
-                        void operator--();
+                        void operator++() { _current_node = _current_node->_next;}
+                        void operator--() { _current_node = _current_node->_prev;}
                         bool operator==(const ListIterator &value) const;
+                        // bool operator==(const ListConstIterator &value) {return (_current_node==value._current_node);}
                         bool operator!=(const ListIterator &value) const;
+                        // bool operator!=(const ListConstIterator &value) {return (_current_node!=value._current_node);}
                         ListIterator& operator=(ListIterator other) noexcept;
                         int FindIndex(List &a);
                         Node* _current_node = nullptr;
@@ -76,25 +81,24 @@ class List {
         };
         using iterator = ListIterator;
 
-        class ListConstIterator: public iterator{
+        class ListConstIterator: public ListIterator{
                 public:
                         ListConstIterator() {_current_node = nullptr;}
                         ListConstIterator(Node* value) {_current_node = value; }
                         ListConstIterator(const ListConstIterator &value): _current_node(value._current_node) {} 
-                        ListConstIterator(const ListIterator value): iterator(value) {} 
+                        // ListConstIterator(const ListIterator value): _current_node(value._current_node) {} 
+                        ListConstIterator(const ListIterator value) {_current_node = value._current_node;} 
                         ~ListConstIterator(){};
+                        void operator++() {_current_node = _current_node->_next;}
+                        bool operator!=(const ListIterator &value) {return (_current_node!=value._current_node);}
                         const_reference operator*();
                         ListConstIterator& operator=(ListConstIterator other);
                         Node* _current_node = nullptr;  
         };
         using const_iterator = ListConstIterator;
 
-
-
-
-
         public:
-        void Erase(iterator pos) noexcept;	//erases element at pos
+        void Erase(iterator pos) ;	//erases element at pos
         void KindOfQS(int head_iter, int tail_iter);
         int Partition(int start, int end);
         void Splice(const_iterator pos, List& other) noexcept; //	transfers elements from List other starting from pos
