@@ -1,5 +1,4 @@
 // https://github.com/Ideful/CPP_Containers
-// #include "list.h"
 
 namespace s21{
 template <typename T>
