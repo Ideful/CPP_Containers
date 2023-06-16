@@ -71,9 +71,7 @@ class List {
                         void operator++() { _current_node = _current_node->_next;}
                         void operator--() { _current_node = _current_node->_prev;}
                         bool operator==(const ListIterator &value) const;
-                        // bool operator==(const ListConstIterator &value) {return (_current_node==value._current_node);}
                         bool operator!=(const ListIterator &value) const;
-                        // bool operator!=(const ListConstIterator &value) {return (_current_node!=value._current_node);}
                         ListIterator& operator=(ListIterator other) noexcept;
                         int FindIndex(List &a);
                         Node* _current_node = nullptr;
@@ -86,7 +84,6 @@ class List {
                         ListConstIterator() {_current_node = nullptr;}
                         ListConstIterator(Node* value) {_current_node = value; }
                         ListConstIterator(const ListConstIterator &value): _current_node(value._current_node) {} 
-                        // ListConstIterator(const ListIterator value): _current_node(value._current_node) {} 
                         ListConstIterator(const ListIterator value) {_current_node = value._current_node;} 
                         ~ListConstIterator(){};
                         void operator++() {_current_node = _current_node->_next;}

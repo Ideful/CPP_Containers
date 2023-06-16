@@ -411,14 +411,14 @@ void List<T>::Erase(typename List<T>::iterator pos)  {
 template <typename T>
 typename List<T>::iterator List<T>::Insert(iterator pos, const_reference value) {
     iterator newpos(_head);
-    int flag = 0;
+    int iterator_checker = 0;
     size_type size = Size();
     for(size_type i = 0; i < size;i++) {
-        if (newpos == pos) flag = 1;
+        if (newpos == pos) iterator_checker = 1;
         ++newpos;
     }
     newpos._current_node = _head;
-    if (flag) {
+    if (iterator_checker) {
         if (pos._current_node == _head) {
             PushFront(value);
         } else if (pos._current_node == _end) {

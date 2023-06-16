@@ -526,6 +526,8 @@ TEST(List, function_emplace_end) {
   TestList tester;
   s21::List<int>::iterator s21_it = tester.s21_list_ten.End();
   std::list<int>::iterator std_it = tester.std_list_ten.end();
+  --s21_it;
+  --std_it;
   s21_it = tester.s21_list_ten.Emplace(s21_it, 666);
   std_it = tester.std_list_ten.emplace(std_it, 666);
   EXPECT_EQ(*s21_it, *std_it);
@@ -716,25 +718,25 @@ s21::List<double>A = {1.0006,21,3,4,51,6,7,8,9,10,765765467.646,6,7,7,53,2,2,45,
   EXPECT_EQ(a, b);
 }
 
-// TEST(move_constructor, TEST_1){
-//   s21:: List<int>A = {1,4,6,4,8};
-//   s21:: List<int>B(std::move(A));
+TEST(move_constructor, TEST_1){
+  s21:: List<int>A = {1,4,6,4,8};
+  s21:: List<int>B(std::move(A));
 
-//   EXPECT_EQ(A.Size(), 0);
+  EXPECT_EQ(A.Size(), 0);
 
-//   EXPECT_EQ(B.Size(), 5);
+  EXPECT_EQ(B.Size(), 5);
 
-//   s21:: List<int>::ListIterator iterA = B.Begin();
-//    EXPECT_EQ(*iterA, 1);
-//    iterA = B.End();
-//    --iterA;
-//    EXPECT_EQ(*iterA, 8);
+  s21:: List<int>::ListIterator iterA = B.Begin();
+   EXPECT_EQ(*iterA, 1);
+   iterA = B.End();
+   --iterA;
+   EXPECT_EQ(*iterA, 8);
 
-//   iterA = A.Begin();
-//   EXPECT_EQ(iterA, nullptr);
-//   iterA = A.End();
-//   EXPECT_EQ(iterA, nullptr);
-// }
+  // iterA = A.Begin();
+  // EXPECT_EQ(iterA, nullptr);
+  // iterA = A.End();
+  // EXPECT_EQ(iterA, nullptr);
+}
 
 TEST(move_operator, TEST_1){
    s21::List<int>A = {1,4,6,4,8};
@@ -776,20 +778,20 @@ TEST(insert_test, TEST_1){
 }
 
 
-// TEST(insert_test, TEST_2){
-//   s21::List<int>B{1,1,1,1,1,1,1,1,1};
-//   s21::List<int>::ListIterator iter = B.End();
-
-//   iter = B.Insert(iter,0);
+TEST(insert_test, TEST_2){
+  s21::List<int>B{1,1,1,1,1,1,1,1,1};
+  s21::List<int>::ListIterator iter = B.End();
+  --iter;
+  iter = B.Insert(iter,0);
  
-//   for(s21::List<int>::ListIterator iterat = B.Begin(); iterat != B.End(); ++iterat){
-//     if(iter == iterat){
-//       EXPECT_EQ(*iter,0);
-//     } else {
-//       EXPECT_EQ(*iterat,1);
-//     }
-//   }
-// }
+  for(s21::List<int>::ListIterator iterat = B.Begin(); iterat != B.End(); ++iterat){
+    if(iter == iterat){
+      EXPECT_EQ(*iter,0);
+    } else {
+      EXPECT_EQ(*iterat,1);
+    }
+  }
+}
 
 TEST(insert_test, TEST_3){
  s21::  List<int>A{0,0,0,0,0,0,0};
@@ -935,32 +937,13 @@ TEST(size_test, TEST_3){
  EXPECT_EQ(mine,orig);
 }
 
-// TEST(MaxSize_test, TEST_1){
-//   s21::List<int>B{1,2,3,4,5,5,32,2,4,1,1,1,3};
-//   size_t mine = B.MaxSize();
-//  EXPECT_EQ(mine,576460752303423487);
-// }
-
-// TEST(MaxSize_test, TEST_2){
-//   s21::List<double>B{1,2,3,4,5,5,32,2,4,1,1,1,3};
-//   size_t mine = B.MaxSize();
-//  EXPECT_EQ(mine,576460752303423487);
-// }
-
-// TEST(MaxSize_test, TEST_3){
-
-//   s21::List<char>B{1,2,3,4,5,5,32,2,4,1,1,1,3};
-//   size_t mine = B.MaxSize();
-//  EXPECT_EQ(mine,576460752303423487);
-// }
-
-// TEST(MaxSize_test, TEST_4){
-//   s21::List<char>B;
-//   size_t mine = B.MaxSize();
-
-//  EXPECT_EQ(mine,576460752303423487);
-// }
-
+TEST(MaxSize_test, TEST_1){
+  s21::List<char>B;
+  size_t mine = B.MaxSize();
+  std::list<char>C;
+  size_t their = C.max_size();
+  EXPECT_EQ(mine,their);
+}
 
 TEST(PushBack_front_test, TEST_4){
   std::list<char> A;
@@ -996,7 +979,6 @@ TEST(PushBack_front_test, TEST_4){
      ++it_mine;
   }
 }
-
 
 TEST(erase, TEST_1){
   std::list<int> A{1,2,3,4,5,5,32,2,4,1,1,1,3};
