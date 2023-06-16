@@ -326,6 +326,19 @@ void List<T>::Splice(typename List<T>::const_iterator pos, List& other) noexcept
         ++iter;
     }
     if (flag) {
+        // int cnt = 0;
+        // ListIterator tmp = pos;
+        // while(pos._current_node != other._end) {
+        //     cnt++;
+        //     ++pos;
+        // }
+        // ListIterator qwe(_tail);
+        // ParCons(cnt);
+        // for(int i = 0; i < cnt; i++) {
+        //     ++qwe;
+        //     *qwe = *tmp;
+        //     ++tmp;
+        // }
         iterator iter_other(other._tail);
         while(iter_other != other._end) {
             pos = Insert(pos,*iter_other);
@@ -344,6 +357,7 @@ void List<T>::Reverse() noexcept{
         Node * tmp_h = _head;
         Node * tmp_t = _tail;
         T data = *iterator_head;
+
         for(int i = 0; i < _size / 2; i++) {
             tmp_h->_data = *iterator_tail;
             tmp_t->_data = data;
@@ -419,18 +433,17 @@ typename List<T>::iterator List<T>::Insert(iterator pos, const_reference value) 
             for (int i = 0; i < index; i++) {
                 ++newpos; 
             }
-            _size++;
         }
     } else if (_head == nullptr) {
         PushBack(value);
         newpos._current_node = _head;
-    } else if (pos = End()) {
+    } else if (pos == End()) {
         PushBack(value);
         ++pos;
-    } 
-    else {
+    } else {
         throw std::out_of_range("wrong iterator");
     }
+    _size++;
     return newpos;
 }
 
