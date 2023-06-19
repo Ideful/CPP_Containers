@@ -3,6 +3,8 @@
 #include "list.h"
 #include <stack>
 #include "stack.h"
+#include "queue.h"
+#include <queue>
 // //_______________________________LIST_TESTS________________________________
 
 class TestList {
@@ -1011,7 +1013,7 @@ TEST(erase, TEST_2){
 
 
 
-
+// stack
 
 
 
@@ -1343,9 +1345,210 @@ TEST(StackTest, Move) {
 }
 
 
+template <typename T>
+bool compare_queues(s21::Queue<T> my_queue,
+                    std::queue<T> std_queue) {
+  bool result = true;
+  if (my_queue.Size() == std_queue.size()) {
+    while (!my_queue.Empty() && !std_queue.empty()) {
+      if (my_queue.Front() != std_queue.front()) {
+        result = false;
+        break;
+      }
+      my_queue.Pop();
+      std_queue.pop();
+    }
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+TEST(QueueTest, CompareQueues) {
+  s21::Queue<int> my_queue{1, 3, 10, -5, 20};
+  std::queue<int> std_queue;
+  std_queue.push(1);
+  std_queue.push(3);
+  std_queue.push(10);
+  std_queue.push(-5);
+  std_queue.push(20);
+  EXPECT_TRUE(compare_queues(my_queue, std_queue));
+  std_queue.push(20);
+  EXPECT_FALSE(compare_queues(my_queue, std_queue));
+}
+
+TEST(QueueTest, DefaultConstructor) {
+  s21::Queue<int> my_queue;
+  std::queue<int> std_queue;
+  EXPECT_EQ(my_queue.Size(), 0);
+  EXPECT_TRUE(my_queue.Empty());
+  EXPECT_TRUE(compare_queues(my_queue, std_queue));
+}
+
+TEST(QueueTest, InitializerqueueConstructor) {
+  s21::Queue<int> my_queue{1, 2, 3, 7, 9};
+  std::initializer_list<int> il = {1, 2, 3, 7, 9};
+  std::queue<int> std_queue{il};
+  EXPECT_TRUE(compare_queues(my_queue, std_queue));
+}
+
+TEST(QueueTest, InitializerqueueConstructor_2) {
+  std::initializer_list<int> b;
+  s21::Queue<int> my_queue{b};
+  std::queue<int> std_queue{b};
+  EXPECT_TRUE(compare_queues(my_queue, std_queue));
+}
+
+TEST(QueueTest, CopyConstructor) {
+  s21::Queue<int> my_queue{1, 2, 3, 7, 9};
+  s21::Queue<int> my_queue_copy(my_queue);
+  std::initializer_list<int> il = {1, 2, 3, 7, 9};
+  std::queue<int> std_queue{il};
+  std::queue<int> std_queue_copy(std_queue);
+  EXPECT_TRUE(compare_queues(my_queue_copy, std_queue_copy));
+}
+
+TEST(QueueTest, CopyConstructorEmpty) {
+  s21::Queue<int> my_queue;
+  s21::Queue<int> my_queue_copy(my_queue);
+  std::queue<int> std_queue;
+  std::queue<int> std_queue_copy(std_queue);
+  EXPECT_TRUE(compare_queues(my_queue_copy, std_queue_copy));
+}
+
+TEST(QueueTest, MoveConstructor) {
+  s21::Queue<int> my_queue{1, 2, 3, 7, 20};
+  s21::Queue<int> my_queue_copy(my_queue);
+  s21::Queue<int> my_queue_move(std::move(my_queue));
+  std::initializer_list<int> il = {1, 2, 3, 7, 20};
+  std::queue<int> std_queue{il};
+  std::queue<int> std_queue_copy(std_queue);
+  std::queue<int> std_queue_move(std::move(std_queue));
+  EXPECT_TRUE(compare_queues(my_queue_copy, std_queue_copy));
+}
+
+TEST(QueueTest, MoveConstructorEmpty) {
+  s21::Queue<int> my_queue;
+  s21::Queue<int> my_queue_copy(my_queue);
+  s21::Queue<int> my_queue_move(std::move(my_queue));
+  std::queue<int> std_queue;
+  std::queue<int> std_queue_copy(std_queue);
+  std::queue<int> std_queue_move(std::move(std_queue));
+  EXPECT_TRUE(compare_queues(my_queue_copy, std_queue_copy));
+}
+
+TEST(QueueTest, MoveAssignmentOperator) {
+  s21::Queue<int> my_queue{1, 2, 3, 7, 20};
+  s21::Queue<int> my_queue_copy(my_queue);
+  s21::Queue<int> my_queue_move = std::move(my_queue);
+  std::initializer_list<int> il = {1, 2, 3, 7, 20};
+  std::queue<int> std_queue{il};
+  std::queue<int> std_queue_copy(std_queue);
+  std::queue<int> std_queue_move = std::move(std_queue);
+  EXPECT_TRUE(compare_queues(my_queue_move, std_queue_move));
+}
+
+TEST(QueueTest, MoveAssignmentOperatorEmpty) {
+  s21::Queue<int> my_queue;
+  s21::Queue<int> my_queue_copy(my_queue);
+  s21::Queue<int> my_queue_move = std::move(my_queue);
+  std::queue<int> std_queue;
+  std::queue<int> std_queue_copy(std_queue);
+  std::queue<int> std_queue_move = std::move(std_queue);
+  EXPECT_TRUE(compare_queues(my_queue_move, std_queue_move));
+}
+
+TEST(QueueTest, Front) {
+  s21::Queue<int> my_queue{99, 2, 3, 4, 5};
+  std::initializer_list<int> il = {99, 1, 3, 7, 20};
+  std::queue<int> std_queue{il};
+  EXPECT_EQ(my_queue.Front(), std_queue.front());
+}
+
+TEST(QueueTest, Back) {
+  s21::Queue<int> my_queue{1, 2, 3, 3, 4, 99};
+  std::initializer_list<int> il = {99, 1, 3, 5, 4, 7, 99};
+  std::queue<int> std_queue{il};
+  EXPECT_EQ(my_queue.Back(), std_queue.back());
+}
+
+TEST(QueueTest, Empty) {
+  s21::Queue<int> my_queue;
+  std::queue<int> std_queue;
+  EXPECT_EQ(my_queue.Empty(), std_queue.empty());
+  my_queue.Push(2354);
+  std_queue.push(2354);
+  EXPECT_EQ(my_queue.Empty(), std_queue.empty());
+}
+
+TEST(QueueTest, Size) {
+  s21::Queue<int> my_queue{1, 2, 3, 4, 5, 6, 7, 8};
+  std::initializer_list<int> il = {1, 2, 3, 4, 5, 6, 7, 8};
+  std::queue<int> std_queue{il};
+  EXPECT_EQ(my_queue.Size(), std_queue.size());
+}
+
+TEST(QueueTest, Push) {
+  s21::Queue<int> my_queue;
+  std::queue<int> std_queue;
+  my_queue.Push(627);
+  std_queue.push(627);
+  my_queue.Push(2354);
+  std_queue.push(2354);
+  EXPECT_TRUE(compare_queues(my_queue, std_queue));
+}
+
+TEST(QueueTest, Pop) {
+  s21::Queue<int> my_queue{1, 2, 3, 4, 5, 6, 7, 8};
+  std::initializer_list<int> il = {1, 2, 3, 4, 5, 6, 7, 8};
+  std::queue<int> std_queue{il};
+  my_queue.Pop();
+  my_queue.Pop();
+  std_queue.pop();
+  std_queue.pop();
+  EXPECT_TRUE(compare_queues(my_queue, std_queue));
+  EXPECT_EQ(my_queue.Front(), 3);
+}
+
+TEST(QueueTest, Swap) {
+  s21::Queue<int> my_queue1{1, 2, 3, 4, 5};
+  s21::Queue<int> my_queue2{6, 7, 8, 9, 10, 11};
+  my_queue1.Swap(my_queue2);
+
+  std::initializer_list<int> il1 = {1, 2, 3, 4, 5};
+  std::initializer_list<int> il2 = {6, 7, 8, 9, 10, 11};
+  std::queue<int> std_queue1{il1};
+  std::queue<int> std_queue2{il2};
+  std_queue1.swap(std_queue2);
+
+  EXPECT_TRUE(compare_queues(my_queue1, std_queue1));
+  EXPECT_TRUE(compare_queues(my_queue2, std_queue2));
+}
 
 
+TEST(QueueTest, emplace_back) {
+  s21::Queue<int> my_queue1{17,40,32};
+  s21::Queue<int> my_queue2;
+  my_queue2 = (std::move(my_queue1));
+     my_queue2.EmplaceBack(1,2,3,4,5,67,8);
+    EXPECT_EQ(my_queue2.Front() , 17);
+       EXPECT_EQ(my_queue2.Back() , 8);
+}
 
+
+TEST(QueueTest, Swap_2) {
+  s21::Queue<int> my_queue1{1, 2, 99, 4, 242};
+  s21::Queue<int> my_queue2;
+  my_queue1.Swap(my_queue2);
+
+  std::initializer_list<int> il = {1, 2, 99, 4, 242};
+  std::queue<int> std_queue1{il};
+  std::queue<int> std_queue2;
+  std_queue1.swap(std_queue2);
+
+  EXPECT_TRUE(compare_queues(my_queue1, std_queue1));
+  EXPECT_TRUE(compare_queues(my_queue2, std_queue2));
+}
 
 
 int main(int argc, char **argv){

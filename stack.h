@@ -5,7 +5,7 @@
 #include <initializer_list>
 
 namespace s21{
-    template <class T>
+    template <typename T>
 
     class Stack {
         public:
@@ -45,7 +45,6 @@ namespace s21{
 
     };
 }
-
 
 #include "stack.tpp"
 #endif //  SRC_STACK_H_

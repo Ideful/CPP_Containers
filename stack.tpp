@@ -130,11 +130,11 @@ namespace s21{
         
     }
 
-template <typename T>
-template <typename... Args>
-void Stack<T>::EmplaceFront(Args &&...args) {
-    ([&] { Push(args); }(), ...);
-}
+    template <typename T>
+    template <typename... Args>
+    void Stack<T>::EmplaceFront(Args &&...args) {
+        ([&] { Push(args); }(), ...);
+    }
 
 
     template <typename T>
@@ -146,19 +146,3 @@ void Stack<T>::EmplaceFront(Args &&...args) {
         }
     }
 }
-
-// int main() {
-//     s21::Stack<int> qwe{2,3,4,5};
-//     s21::Stack<int> zxc{22,24,25,7};
-//     qwe.Swap(zxc);
-//     // qwe.Push(2);
-//     // qwe.Push(23);
-//     // qwe.Push(23);
-//     // qwe.Push(23);
-//     // qwe.Push(23);
-//     qwe.PrintStack();
-//     std::cout<<'\n';
-//     std::cout<<'\n';
-//     zxc.PrintStack();
-    
-// }

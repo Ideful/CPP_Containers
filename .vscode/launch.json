@@ -8,8 +8,10 @@
             "type": "lldb",
             "request": "launch",
             "name": "Debug",
-            "program": "${workspaceFolder}/test_exec",
-            // "program": "${workspaceFolder}/qwe/a.out",
+            // "program": "${workspaceFolder}/test_exec",
+            // "program": "${workspaceFolder}/a.out",
+            // "program": "${workspaceFolder}/testing_h_decompose/a.out",
+            "program": "${workspaceFolder}/testing_h_decompose/test_exec",
             "args": [],
             "cwd": "${workspaceFolder}"
         }
