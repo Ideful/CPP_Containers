@@ -4,7 +4,7 @@
 #include <iostream>
 #include <limits>
 #include <initializer_list>
-#include "listiterators.h"
+
 
 namespace s21{
 template <typename T>
@@ -49,77 +49,69 @@ class List {
         void Sort()noexcept; //	sorts the elements
         void PrintList();
 
-        struct Node{
-                value_type data_;
-                Node* prev_ = nullptr;
-                Node* next_ = nullptr;
-                Node() : data_(), prev_(nullptr), next_(nullptr){};
-                Node(const T value) : data_(value), prev_(nullptr), next_(nullptr){};
-        };
 
         private:
-                Node* head_ = nullptr;
-                Node* tail_ = nullptr;
-                Node* end_;
-                int size_;
-                value_type var_ = 0;
-                const_reference _variable = var_;
+
+        struct Node {
+            value_type data_;
+            Node* prev_ = nullptr;
+            Node* next_ = nullptr;
+            Node() : data_(), prev_(nullptr), next_(nullptr){};
+            Node(const T value) : data_(value), prev_(nullptr), next_(nullptr){};
+        };
+            Node* head_ = nullptr;
+            Node* tail_ = nullptr;
+            Node* end_;
+            int size_;
+            value_type var_ = 0;
+            const_reference _variable = var_;
 
         public:
         class ListIterator {
-                public:
-                        ListIterator():current_node_(nullptr){}
-                        ListIterator(Node* value):current_node_(value){}
-                        ListIterator(const ListIterator &value):current_node_(value.current_node_), _index(value._index){}
-                        ListIterator(const ListConstIterator &value):current_node_(value.current_node_), _index(value._index){}
-                        ~ListIterator(){};
-                        // reference operator*();
-                        reference operator*(){return current_node_->data_;}
-                        void operator++() { current_node_ = current_node_->next_;}
-                        void operator--() { current_node_ = current_node_->prev_;}
-                        
-                        
-                        bool operator==(const ListIterator &other) const {
-                                return current_node_==other.current_node_;
-                        }
+            public:
+                Node* node_ = nullptr;  
+                size_type index_;
+                ListIterator():node_(nullptr),index_(0){}
+                ListIterator(Node* value):node_(value), index_(0){}
+                ListIterator(const ListIterator &value):node_(value.node_), index_(value.index_){}
+                ~ListIterator(){};
+                reference operator*(){return node_->data_;}
+                void operator++() { node_ = node_->next_;}
+                void operator--() { node_ = node_->prev_;}
+                
+                bool operator==(const ListIterator &other) const {
+                    return node_==other.node_;
+                }
 
-                        bool operator!=(const ListIterator &other) const {
-                                return current_node_!=other.current_node_;
-                        }
+                bool operator!=(const ListIterator &other) const {
+                    return node_!=other.node_;
+                }
 
-                        ListIterator& operator=(ListIterator other) noexcept {
-                                current_node_ = other.current_node_;
-                                _index = other._index;
-                                return *this;
-                        }
-                        size_type FindIndex(List &a) {
-                                size_type res = 0;
-                                Node * tmp = current_node_;
-                                while(tmp != a.head_){ 
-                                        tmp = tmp->prev_;
-                                        res++;
-                                }
-                                return res;
-                        }
-                        Node* current_node_ = nullptr;
-                        int _index;
+                ListIterator& operator=(ListIterator other) noexcept {
+                    node_ = other.node_;
+                    index_ = other.index_;
+                    return *this;
+                }
+                size_type FindIndex(List &a) {
+                    size_type res = 0;
+                    Node * tmp = node_;
+                    while(tmp != a.head_){ 
+                        tmp = tmp->prev_;
+                        res++;
+                    }
+                    return res;
+                }
         };
 
         class ListConstIterator: public ListIterator{
-                public:
-                        ListConstIterator() {current_node_ = nullptr;}
-                        ListConstIterator(Node* value) {current_node_ = value; }
-                        ListConstIterator(const ListConstIterator &value): current_node_(value.current_node_) {} 
-                        ListConstIterator(const ListIterator value) {current_node_ = value.current_node_;} 
-                        ~ListConstIterator(){};
-                        void operator++() {current_node_ = current_node_->next_;}
-                        bool operator!=(const ListIterator &value) {return (current_node_!=value.current_node_);}
-                        const_reference operator*() {return current_node_->data_;}
-                        ListConstIterator& operator=(ListConstIterator other) {
-                                current_node_ = other.current_node_;
-                                return *this;
-                        };
-                        Node* current_node_ = nullptr;  
+            public:
+                ListConstIterator(): ListIterator() {}
+                ListConstIterator(Node* value) : ListIterator(value) {}
+                ListConstIterator(const ListConstIterator& ref) : ListIterator(ref) {}
+                ListConstIterator(ListIterator value):ListIterator(value) {} 
+                ~ListConstIterator(){};
+                const_reference operator*() {return ListIterator::operator*();}
+
         };
 
         public:
@@ -389,7 +381,7 @@ typename List<T>::ListIterator List<T>::Begin() {
         Node* tmp = new Node();
         iterator qwe(tmp);
         res = qwe;
-        res.current_node_->data_ = 0;
+        res.node_->data_ = 0;
         delete tmp;
     }
     return res;
@@ -455,7 +447,7 @@ void List<T>::Splice(typename List<T>::const_iterator pos, List& other) noexcept
     if (flag) {
         iterator iter_other(other.tail_);
         while(iter_other != other.end_) {
-            pos = Insert(pos,*iter_other);
+            Insert(pos,*iter_other);
             --iter_other;
         }
     }
@@ -496,22 +488,22 @@ void List<T>::Erase(typename List<T>::iterator pos)  {
         if (iter == pos) flag = 1;
         ++iter;
     }
-    if (pos.current_node_ == end_) {
+    if (pos.node_ == end_) {
         throw std::out_of_range("pls don't");
     }
     if (flag) {
         if (size_ == 0) {}
         else if (size_ == 1) PopBack(); // eto ne to4no
         else {
-            if (pos.current_node_ == head_) {
+            if (pos.node_ == head_) {
                 PopFront();
-            } else if (pos.current_node_ == tail_) {
+            } else if (pos.node_ == tail_) {
                 PopBack();
             } else {
-                pos.current_node_->prev_->next_ = pos.current_node_->next_;
-                pos.current_node_->next_->prev_ = pos.current_node_->prev_;
-                Node* tmp = pos.current_node_;
-                pos.current_node_ = pos.current_node_->prev_;
+                pos.node_->prev_->next_ = pos.node_->next_;
+                pos.node_->next_->prev_ = pos.node_->prev_;
+                Node* tmp = pos.node_;
+                pos.node_ = pos.node_->prev_;
                 delete tmp;     
                 // tmp = nullptr;
             }
@@ -530,20 +522,20 @@ typename List<T>::iterator List<T>::Insert(iterator pos, const_reference value) 
         if (newpos == pos) iterator_checker = 1;
         ++newpos;
     }
-    newpos.current_node_ = head_;
+    newpos.node_ = head_;
     if (iterator_checker) { 
-        if (pos.current_node_ == head_) {
+        if (pos.node_ == head_) {
             PushFront(value);
-        } else if (pos.current_node_ == end_) {
+        } else if (pos.node_ == end_) {
             PushBack(value);
             // --newpos;
         } else {
             int index = pos.FindIndex(*this);
             Node* newval = new Node(value);
-            pos.current_node_->prev_->next_ = newval;
-            newval->next_ = pos.current_node_;
-            newval->prev_ = pos.current_node_->prev_;
-            pos.current_node_->prev_ = newval;
+            pos.node_->prev_->next_ = newval;
+            newval->next_ = pos.node_;
+            newval->prev_ = pos.node_->prev_;
+            pos.node_->prev_ = newval;
             for (int i = 0; i < index; i++) {
                 ++newpos; 
             }
@@ -551,7 +543,7 @@ typename List<T>::iterator List<T>::Insert(iterator pos, const_reference value) 
         }
     } else if (head_ == nullptr) {
         PushBack(value);
-        newpos.current_node_ = head_;
+        newpos.node_ = head_;
     } else if (pos == End()) {
         PushBack(value);
         ++pos;
@@ -565,7 +557,7 @@ typename List<T>::iterator List<T>::Insert(iterator pos, const_reference value) 
 template <typename T>
 void List<T>::Unique() noexcept{
     for(ListIterator iter_i(head_); iter_i != End(); ++iter_i) {
-        for(ListIterator iter_j(iter_i.current_node_->next_); iter_j != End(); ++iter_j) {
+        for(ListIterator iter_j(iter_i.node_->next_); iter_j != End(); ++iter_j) {
             if (*iter_i == *iter_j) Erase(iter_j);
         }
     }
@@ -575,9 +567,9 @@ void List<T>::Unique() noexcept{
 template <typename T>
 void List<T>::KindOfQS(int start, int end) {
     if (start < end) {
-        int pivot_index = Partition(start,end);
-        KindOfQS(start, pivot_index - 1);
-        KindOfQS(pivot_index + 1, end);
+        int pivotindex_ = Partition(start,end);
+        KindOfQS(start, pivotindex_ - 1);
+        KindOfQS(pivotindex_ + 1, end);
     }
 }
 
@@ -666,3 +658,6 @@ typename List<T>::iterator List<T>::Emplace(const_iterator pos, Args &&...args) 
 // #include "list.tpp"
 
 #endif //  SRC_LIST_H_
+
+
+

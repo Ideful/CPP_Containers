@@ -151,6 +151,7 @@ TEST(List, function_back) {
     s21::List<char>::const_iterator con_it = emptylist.Begin();
     EXPECT_TRUE(*con_it == 0);
 }
+
 TEST(List, function_back_empty) {
   TestList tester;
   EXPECT_DOUBLE_EQ(tester.s21_list_empty.Back(), tester.std_list_empty.back());

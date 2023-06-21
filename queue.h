@@ -21,7 +21,6 @@ namespace s21{
                 listique = std::move(n.listique);
                 return *this;    
             }
-            // void operator=(Queue &n);
             const_reference Front() {return listique.Front();}
             const_reference Back() {return listique.Back();}
             bool Empty() {return listique.Empty();}
