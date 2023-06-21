@@ -1,8 +1,6 @@
 #ifndef SRC_STACK_H_
 #define SRC_STACK_H_
-#include <iostream>
-#include <limits>
-#include <initializer_list>
+#include "list.h"
 
 namespace s21{
     template <typename T>
@@ -13,38 +11,37 @@ namespace s21{
             using reference = T &;
             using const_reference = const T &;
             using size_type = size_t;
-            Stack();
-            Stack(std::initializer_list<value_type> const &items);
-            Stack(const Stack &n);
-            Stack(Stack &&n);
-            ~Stack();
-            void Clear();
-            void operator=(Stack &&n);
-            void operator=(Stack &n);
-            void Copier(const Stack &n);
-            void Mover(Stack &n);
-            const_reference Top();
-            bool Empty();
-            size_type Size();
-            void Push(const_reference val);
-            void Pop();
-            void Swap(Stack& val);
-            void PrintStack();
+            Stack():listique() {}
+            Stack(std::initializer_list<value_type> const &items): listique(items) {}
+            Stack(const Stack &n): listique(n.listique) {}
+            Stack(Stack &&n) : listique(std::move(n.listique)) {}
+            ~Stack() {};
+            // void Clear();
+            Stack& operator=(Stack &&n){
+                listique = std::move(n.listique);
+                return *this;    
+            }
+            const_reference Top() {
+                if (listique.Size() > 0) return listique.Back();
+                else throw std::out_of_range("empty stack");
+            }
+            bool Empty(){return listique.Empty();}
+            size_type Size() {return listique.Size();}
+            void Push(const_reference val) {listique.PushBack(val);}
+            void Pop(){listique.PopBack();}
+            void Swap(Stack& val) {listique.Swap(val.listique);}
+            // void PrintStack();
 
             template <typename... Args>
-            void EmplaceFront(Args &&...args);
-            struct Node{
-                value_type _data;
-                Node* _next = nullptr;
-                Node(): _data(),_next(nullptr){};
-                Node (const_reference val) : _data(val), _next(nullptr) {};
-            };
+            void EmplaceFront(Args &&...args) {
+                ([&] { Push(args); }(), ...);
+            }
             private:
-            Node* _head = nullptr;
-            size_type _size = 0;
+            List<T> listique;
+            // Node* _head = nullptr;
+            // size_type _size = 0;
 
     };
 }
 
-#include "stack.tpp"
 #endif //  SRC_STACK_H_

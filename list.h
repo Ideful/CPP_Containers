@@ -29,7 +29,7 @@ namespace s21{
 
 
             const_reference Front() const noexcept;	  //      access the first element
-            const_reference Back() const noexcept;	  //      access the last element
+            const_reference Back() const;	  //      access the last element
             bool Empty() const noexcept;  //	checks whether the container is empty
             size_type Size()  noexcept;	// returns size
             size_type MaxSize() const noexcept;	// check node qty
@@ -236,7 +236,7 @@ namespace s21{
     }
 
     template <typename T>
-    typename List<T>::const_reference List<T>::Back() const noexcept {
+    typename List<T>::const_reference List<T>::Back() const {
         if (tail_ && tail_->data_) return tail_->data_;
         else return _variable;
     }
@@ -285,50 +285,54 @@ namespace s21{
 
     template <typename T>
     void List<T>::PopFront(){
-        if (head_ == nullptr) throw std::out_of_range("nothing to pop");
-        if (size_ == 1) {
-            delete end_;
-            delete head_;
-            head_ = tail_ = end_ = nullptr;
-        } 
-        else {
-            Node* newnode = head_->next_;
-            head_ = newnode;
-            newnode = newnode->prev_;
-            delete newnode;
-            head_->prev_ = end_;
-            end_->next_ = head_;
+        if (head_) {
+            if (size_ == 1) {
+                delete end_;
+                delete head_;
+                head_ = tail_ = end_ = nullptr;
+            } 
+            else {
+                Node* newnode = head_->next_;
+                head_ = newnode;
+                newnode = newnode->prev_;
+                delete newnode;
+                head_->prev_ = end_;
+                end_->next_ = head_;
+            }
+            size_--;
         }
-        size_--;
     }
 
     template <typename T>
     void List<T>::PopBack(){
-        if(head_ == nullptr) throw std::out_of_range("nothing to pop");
-        if (size_ == 1) {
-            delete end_;
-            delete tail_;
-            head_ = tail_ = end_ = nullptr;
-        } 
-        else{
-            Node * newnode = tail_->prev_;
-            tail_ = newnode;
-            newnode = newnode->next_;
-            delete newnode;
-            tail_->next_ = end_;    
-            end_->prev_ = tail_;
+        if (head_) {
+            if (size_ == 1) {
+                delete end_;
+                delete tail_;
+                head_ = tail_ = end_ = nullptr;
+            } 
+            else{
+                Node * newnode = tail_->prev_;
+                tail_ = newnode;
+                newnode = newnode->next_;
+                delete newnode;
+                tail_->next_ = end_;    
+                end_->prev_ = tail_;
+            }
+            size_--;
         }
-        size_--;
     }
 
     template <typename T>
     typename List<T>::size_type List<T>::Size()  noexcept { // 
-        int res = 0;
-        while(head_ != end_) {
-            head_ = head_->next_;
-            res++;
-        }
-        if(head_) head_ = end_->next_;
+        size_type res = 0;
+        Node * tmp(head_);
+        if (tmp) {
+            while(tmp != end_) {
+                tmp = tmp->next_;
+                res++;
+            }
+        } 
         return res;
     }
 

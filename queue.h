@@ -33,9 +33,7 @@ namespace s21{
             void EmplaceBack(Args &&...args) {
                  ([&] { Push(args); }(), ...);
             }
-
-
-            private:
+        private:
             List<T> listique;
     };
 }
