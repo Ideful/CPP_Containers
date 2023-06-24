@@ -1,9 +1,8 @@
-// https://github.com/Ideful/CPP_Containers
 #ifndef SRC_LIST_H_
 #define SRC_LIST_H_
 #include <limits>
 #include <initializer_list>
-
+#include "Node.h"
 
 namespace s21{
     template <typename T>
@@ -19,14 +18,13 @@ namespace s21{
             using const_iterator = ListConstIterator;
 
             List();
-            List(size_type n); /* size_type n */
-            List(std::initializer_list<value_type> const &items); // cho za items
+            List(size_type n); 
+            List(std::initializer_list<value_type> const &items); 
             List(const List &l);
             List(List &&l);
             ~List();
             List& operator=(List &&l);
             List& operator=(List &l);
-
 
             const_reference Front() const noexcept;	  //      access the first element
             const_reference Back() const;	  //      access the last element
@@ -57,39 +55,15 @@ namespace s21{
             template <typename... Args>
             void EmplaceBack(Args&&... args);
 
-            private:
-            void KindOfQS(int head_iter, int tail_iter);
-            int Partition(int start, int end);
-            void ParCons(const size_type n);
-            void Cpy(const List &l);
-            void Swapper(iterator a, iterator b);
-
-            struct Node {
-                value_type data_;
-                Node* prev_ = nullptr;
-                Node* next_ = nullptr;
-                Node() : data_(), prev_(nullptr), next_(nullptr){};
-                Node(const T value) : data_(value), prev_(nullptr), next_(nullptr){};
-            };
-                Node* head_ = nullptr;
-                Node* tail_ = nullptr;
-                Node* end_;
-                size_type size_ = 0;
-                value_type var_ = 0;
-                const_reference _variable = var_;
-
-            public:
             class ListIterator {
                 public:
-                    Node* node_ = nullptr;  
-                    size_type index_;
                     ListIterator():node_(nullptr),index_(0){}
-                    ListIterator(Node* value):node_(value), index_(0){}
+                    ListIterator(Node<T>* value):node_(value), index_(0){}
                     ListIterator(const ListIterator &value):node_(value.node_), index_(value.index_){}
                     ~ListIterator(){};
                     reference operator*(){return node_->data_;}
-                    void operator++() { node_ = node_->next_;}
-                    void operator--() { node_ = node_->prev_;}
+                    iterator& operator++() { node_ = node_->next_; return *this;}
+                    iterator& operator--() { node_ = node_->prev_; return *this;}
                     
                     bool operator==(const ListIterator &other) const {
                         return node_==other.node_;
@@ -105,24 +79,41 @@ namespace s21{
                     }
                     size_type FindIndex(List &a) {
                         size_type res = 0;
-                        Node * tmp = node_;
+                        Node<T> * tmp = node_;
                         while(tmp != a.head_){ 
                             tmp = tmp->prev_;
                             res++;
                         }
                         return res;
                     }
+                private:
+                    Node<T> * node_ = nullptr;  
+                    size_type index_;
             };
 
             class ListConstIterator: public ListIterator{
                 public:
                     ListConstIterator(): ListIterator() {}
-                    // ListConstIterator(Node* value) : ListIterator(value) {}
                     ListConstIterator(const ListConstIterator& ref) : ListIterator(ref) {}
                     ListConstIterator(ListIterator value):ListIterator(value) {} 
                     ~ListConstIterator(){};
                     const_reference operator*() {return ListIterator::operator*();}
             };
+
+            private:
+                void KindOfQS(int head_iter, int tail_iter);
+                int Partition(int start, int end);
+                void ParCons(const size_type n);
+                void Cpy(const List &l);
+                void Swapper(iterator a, iterator b);
+                
+                struct Node<T> node_;
+                Node<T>* head_ = nullptr;
+                Node<T>* tail_ = nullptr;
+                Node<T>* end_;
+                size_type size_ = 0;
+                value_type var_ = 0;
+                const_reference _variable = var_;           
     };
 
     template <typename T>
@@ -133,10 +124,10 @@ namespace s21{
         if (n < MaxSize()) {
             head_ = tail_ = end_ = nullptr, size_ = 0; 
             for(size_type i = 0; i < n; i++) {
-                Node *tmp = new Node();
+                Node<T> *tmp = new Node<T>();
                 if (head_ == nullptr) {
                     head_ = tail_ = tmp;
-                    end_ = new Node();
+                    end_ = new Node<T>();
                     tmp->prev_ = end_;
                 } else {
                     tmp->prev_ = tail_;
@@ -166,7 +157,7 @@ namespace s21{
     template <typename T>
     List<T>::List(const List &l) : List(l.size_) {
         ListIterator ListIterator(l.head_);
-        Node * tmp(head_);
+        Node<T> * tmp(head_);
         while(tmp != end_) {
             tmp->data_ = *ListIterator;
             tmp = tmp->next_;
@@ -226,7 +217,7 @@ namespace s21{
 
     template <typename T>
     typename List<T>::size_type List<T>::MaxSize() const noexcept{
-        return std::numeric_limits<std::size_t>::max() / sizeof(Node) / 2;
+        return std::numeric_limits<std::size_t>::max() / sizeof(Node<T>) / 2;
     }
 
     template <typename T>
@@ -248,10 +239,10 @@ namespace s21{
 
     template <typename T>
     void List<T>::PushBack(typename List<T>::value_type value){
-        Node* tmp = new Node(value);
+        Node<T>* tmp = new Node(value);
         if(head_ == nullptr){
             head_ = tail_ = tmp;
-            end_ = new Node();
+            end_ = new Node<T>();
             tmp->prev_ = end_;
             end_->next_ = head_;
         } 
@@ -267,10 +258,10 @@ namespace s21{
 
     template <typename T>
     void List<T>::PushFront(typename List<T>::value_type value){
-        Node* newnode = new Node(value);
+        Node<T>* newnode = new Node<T>(value);
         if (!head_) {
             head_ = tail_ = newnode;
-            end_ = new Node();
+            end_ = new Node<T>();
             tail_->next_ = end_;
             end_->prev_ = tail_;
         } else {
@@ -292,7 +283,7 @@ namespace s21{
                 head_ = tail_ = end_ = nullptr;
             } 
             else {
-                Node* newnode = head_->next_;
+                Node<T>* newnode = head_->next_;
                 head_ = newnode;
                 newnode = newnode->prev_;
                 delete newnode;
@@ -312,7 +303,7 @@ namespace s21{
                 head_ = tail_ = end_ = nullptr;
             } 
             else{
-                Node * newnode = tail_->prev_;
+                Node<T> * newnode = tail_->prev_;
                 tail_ = newnode;
                 newnode = newnode->next_;
                 delete newnode;
@@ -326,7 +317,7 @@ namespace s21{
     template <typename T>
     typename List<T>::size_type List<T>::Size()  noexcept { // 
         size_type res = 0;
-        Node * tmp(head_);
+        Node<T> * tmp(head_);
         if (tmp) {
             while(tmp != end_) {
                 tmp = tmp->next_;
@@ -340,10 +331,10 @@ namespace s21{
     typename List<T>::ListIterator List<T>::Begin() {
         iterator res(head_);
         if (!head_) {
-            Node* tmp = new Node();
+            Node<T>* tmp = new Node<T>();
             iterator qwe(tmp);
             res = qwe;
-            res.node_->data_ = 0;
+            *res = 0;
             delete tmp;
         }
         return res;
@@ -381,7 +372,6 @@ namespace s21{
                     if (*other_iter <= *this_iter && other_iter != other.End()) {
                         Insert(this_iter,*other_iter);
                         ++other_iter;
-                        // ++this_iter;
                     }  
                     if (*other_iter > *this_iter && this_iter != End()) {
                         ++this_iter;
@@ -435,23 +425,27 @@ namespace s21{
             if (iter == pos) flag = 1;
             ++iter;
         }
-        if (pos.node_ == end_) {
+        if (pos == End()) {
             throw std::out_of_range("pls don't");
         }
         if (flag) {
             if (size_ == 0) {}
             else if (size_ == 1) PopBack(); // eto ne to4no
             else {
-                if (pos.node_ == head_) {
+                iterator tailit(End());
+                --tailit;
+                if (pos == Begin()) {
                     PopFront();
-                } else if (pos.node_ == tail_) {
+                } else if (pos == tailit) {
                     PopBack();
                 } else {
-                    pos.node_->prev_->next_ = pos.node_->next_;
-                    pos.node_->next_->prev_ = pos.node_->prev_;
-                    Node* tmp = pos.node_;
-                    pos.node_ = pos.node_->prev_;
-                    delete tmp;     
+                    Node<T>*connector(head_);
+                    for(size_type i = 0; i < pos.FindIndex(*this);i++) {
+                        connector=connector->next_;
+                    }
+                    connector->prev_->next_ = connector->next_;
+                    connector->next_->prev_ = connector->prev_;
+                    delete connector;     
                 }
             }
             size_--;
@@ -467,27 +461,31 @@ namespace s21{
             if (newpos == pos) iterator_checker = 1;
             ++newpos;
         }
-        newpos.node_ = head_;
+        newpos = head_;
         if (iterator_checker) { 
-            if (pos.node_ == head_) {
-                PushFront(value);
-            } else if (pos.node_ == end_) {
-                PushBack(value);
+            if (pos == Begin()) {
+            PushFront(value);
+            } else if (pos == End()) {
+            PushBack(value);
             } else {
-                int index = pos.FindIndex(*this);
-                Node* newval = new Node(value);
-                pos.node_->prev_->next_ = newval;
-                newval->next_ = pos.node_;
-                newval->prev_ = pos.node_->prev_;
-                pos.node_->prev_ = newval;
-                for (int i = 0; i < index; i++) {
+                size_type index = pos.FindIndex(*this);
+                Node<T>* newval = new Node<T>(value);
+                Node<T>* connector(head_);
+                for (size_type i = 1; i < index; i++) {
+                    connector = connector->next_; 
+                }
+                connector->next_->prev_ = newval;
+                newval->next_ = connector->next_;
+                newval->prev_ = connector;
+                connector->next_ = newval;
+                for (size_type i = 0; i < index; i++) {
                     ++newpos; 
                 }
                 size_++;
             }
         } else if (head_ == nullptr) {
             PushBack(value);
-            newpos.node_ = head_;
+            newpos = Begin();
         } else if (pos == End()) {
             PushBack(value);
             ++pos;
@@ -499,8 +497,10 @@ namespace s21{
 
     template <typename T>
     void List<T>::Unique() noexcept{
-        for(ListIterator iter_i(head_); iter_i != End(); ++iter_i) {
-            for(ListIterator iter_j(iter_i.node_->next_); iter_j != End(); ++iter_j) {
+        for(ListConstIterator iter_i(head_); iter_i != End(); ++iter_i) {
+            ListConstIterator tmp(iter_i);
+            ++tmp;
+            for(ListConstIterator iter_j(tmp); iter_j != End(); ++iter_j) {
                 if (*iter_i == *iter_j) Erase(iter_j);
             }
         }
@@ -574,6 +574,4 @@ namespace s21{
         return iter;
     }
 }
-// #include "list.tpp"
-
 #endif //  SRC_LIST_H_

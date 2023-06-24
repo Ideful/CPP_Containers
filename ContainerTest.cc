@@ -30,6 +30,8 @@ TEST(List, default_constructor) {
   TestList tester;
   EXPECT_EQ(tester.s21_list_empty.Size(), tester.std_list_empty.size());
   EXPECT_EQ(tester.s21_list_empty.Empty(), tester.std_list_empty.empty());
+  // s21::List<int> qwe;
+  // qwe.
 }
 
 TEST(List, init_constructor) {
@@ -363,7 +365,6 @@ TEST(List, function_swap) {
 TEST(List, function_merge_nonsorted) {
   TestList tester;
   s21::List<int> s21_list_merge{77, 125890, 430235, -236, 32858, 7457};
-    // std::list<int> std_lesser{534789,   2479056, 987654, 110101024,62348710, 1, 35674};
   std::list<int> std_list_merge{77, 125890, 430235, -236, 32858, 7457};
   tester.s21_lesser.Merge(s21_list_merge);
   tester.std_lesser.merge(std_list_merge);
@@ -737,10 +738,6 @@ TEST(move_constructor, TEST_1){
    --iterA;
    EXPECT_EQ(*iterA, 8);
 
-  // iterA = A.Begin();
-  // EXPECT_EQ(iterA, nullptr);
-  // iterA = A.End();
-  // EXPECT_EQ(iterA, nullptr);
 }
 
 TEST(move_operator, TEST_1){
@@ -1480,6 +1477,8 @@ TEST(QueueTest, Empty) {
   my_queue.Push(2354);
   std_queue.push(2354);
   EXPECT_EQ(my_queue.Empty(), std_queue.empty());
+  s21::List<int>::iterator qwe;
+
 }
 
 TEST(QueueTest, Size) {

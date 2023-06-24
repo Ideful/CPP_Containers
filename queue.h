@@ -1,7 +1,6 @@
 #ifndef SRC_QUEUE_H_
 #define SRC_QUEUE_H_
 
-// #include <list.tpp>
 #include "list.h"
 namespace s21{
     template <typename T>
@@ -38,5 +37,4 @@ namespace s21{
     };
 }
 
-// #include "Queue.tpp"
 #endif //  SRC_QUEUE_H_
