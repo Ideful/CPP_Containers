@@ -1,3 +1,3 @@
-wq# STL List containers
+STL List containers.
 
 List, queue and stack realisation.
